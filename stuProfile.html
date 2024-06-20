@@ -28,6 +28,10 @@
             height: 50px; /* Adjust the height as needed */
             margin-right: 10px; /* Adjust the spacing as needed */
         }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
         .navbar-links a {
             color: white;
             text-decoration: none;
@@ -41,6 +45,50 @@
             background-color: #ddd;
             color: black;
         }
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-control-static {
+            padding: 7px 12px;
+            margin-bottom: 0;
+            line-height: 1.5;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px; /* Space between the buttons */
+            margin-top: 20px; /* Adjust as needed */
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -52,10 +100,49 @@
         </div>
         <div class="navbar-links">
             <a href="login.html">LOGIN</a>
-        </div>
-        <div class="navbar-links">
             <a href="stuProfile.html">PROFILE</a>
         </div>
     </nav>
+    <div class="wrapper">
+        <div class="page-header">
+            <h1>View Student Profile</h1>
+        </div>
+        <div class="form-group">
+            <label>Matric Number</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($Std_MatricNo); ?></p>
+        </div>
+        <div class="form-group">
+            <label>Name</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($Std_Name); ?></p>
+        </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($Std_HPNo); ?></p>
+        </div>
+        <div class="form-group">
+            <label>Date of Birth</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($Std_DOB); ?></p>
+        </div>
+        <div class="form-group">
+            <label>Gender</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($Std_Gender); ?></p>
+        </div>
+        <div class="form-group">
+            <label>CGPA</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($Std_CGPA); ?></p>
+        </div>
+        <div class="form-group">
+            <label>Advisor ID</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($AA_ID); ?></p>
+        </div>
+        <div class="form-group">
+            <label>Program Code</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($Prog_Code); ?></p>
+        </div>
+        <div class="btn-container">
+            <a href="detailStudent.php" class="btn btn-primary">Back</a>
+            <a href="detailStudent.php" class="btn btn-primary">Update</a>
+        </div>
+    </div>
 </body>
 </html>
