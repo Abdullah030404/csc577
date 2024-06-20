@@ -1,3 +1,41 @@
+<?php
+// Include the database connection file
+include 'dbconnection.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get the form data
+    $studentIC = $_POST['studentIC'];
+    $studentName = $_POST['studentName'];
+    $studentAge = $_POST['studentAge'];
+    $studentEmail = $_POST['studentEmail'];
+    $studentAddress = $_POST['studentAddress'];
+    $guardianName = $_POST['guardianName'];
+    $guardianContact = $_POST['guardianContact'];
+    $classID = $_POST['classID'];
+
+    // Prepare the SQL statement
+    $sql = "INSERT INTO student (studentIC, studentName, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    // Prepare the statement
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind the variables to the prepared statement as parameters
+        $stmt->bind_param("ssissssi", $studentIC, $studentName, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $classID);
+        
+        // Attempt to execute the prepared statement
+        if ($stmt->execute()) {
+            echo "Record inserted successfully.";
+        } else {
+            echo "ERROR: Could not execute query: $sql. " . $conn->error;
+        }
+    } else {
+        echo "ERROR: Could not prepare query: $sql. " . $conn->error;
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +117,6 @@
             margin-left: 20px;
         }
         .form-container input[type="text"],
-        .form-container input[type="password"],
         .form-container input[type="number"],
         .form-container input[type="email"] {
             width: 90%;
@@ -133,32 +170,33 @@
 <div class="container">
     <div class="form-container">
         <h2>Student Registration</h2>
-        <label for="studentIC">Student IC</label>
-        <input type="text" id="studentIC" name="studentIC" maxlength="14" required>
-        <label for="studentName">Student Name</label>
-        <input type="text" id="studentName" name="studentName" maxlength="30" required>
-        <label for="studentAge">Student Age</label>
-        <input type="number" id="studentAge" name="studentAge" required>
-        <label for="studentEmail">Student Email</label>
-        <input type="email" id="studentEmail" name="studentEmail" maxlength="30" required>
-        <label for="studentAddress">Student Address</label>
-        <input type="text" id="studentAddress" name="studentAddress" maxlength="30" required>
-        <label for="guardianName">Guardian Name</label>
-        <input type="text" id="guardianName" name="guardianName" maxlength="30" required>
-        <label for="guardianContact">Guardian Contact</label>
-        <input type="text" id="guardianContact" name="guardianContact" maxlength="10" required>
-        <div class="button-register">
-            <div class="submit">
+        <form action="register_student.php" method="post">
+            <label for="studentIC">Student IC</label>
+            <input type="text" id="studentIC" name="studentIC" maxlength="14" required>
+            <label for="studentName">Student Name</label>
+            <input type="text" id="studentName" name="studentName" maxlength="30" required>
+            <label for="studentAge">Student Age</label>
+            <input type="number" id="studentAge" name="studentAge" required>
+            <label for="studentEmail">Student Email</label>
+            <input type="email" id="studentEmail" name="studentEmail" maxlength="30" required>
+            <label for="studentAddress">Student Address</label>
+            <input type="text" id="studentAddress" name="studentAddress" maxlength="30" required>
+            <label for="guardianName">Guardian Name</label>
+            <input type="text" id="guardianName" name="guardianName" maxlength="30" required>
+            <label for="guardianContact">Guardian Contact</label>
+            <input type="text" id="guardianContact" name="guardianContact" maxlength="10" required>
+            <label for="classID">Class ID</label>
+            <input type="text" id="classID" name="classID" maxlength="10" required>
+            <div class="button-register">
                 <button type="submit">REGISTER</button>
             </div>
-            <br>
-            <div class="account">
-                <a href="login.html">Already have an account?</a>           
-            </div>
+        </form>
+        <br>
+        <div class="account">
+            <a href="login.html">Already have an account?</a>           
         </div>
     </div>
 </div>
-
 
 </body>
 </html>
