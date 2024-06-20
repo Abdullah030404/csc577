@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e1e7e0;
+        }
+        .navbar {
+            background-color: #2b4560;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            padding: 0 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+        .logo-container img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 10px;
+            transition: background-color 0.3s ease;
+            font-family: Verdana, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .navbar-links a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .main-content {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            width: 80%;
+            margin: auto;
+            margin-top: 80px; /* Adjust to account for navbar height */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #2b4560;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="homepage.html">
+                <img src="image/tahfiz.jpg" alt="Logo">
+            </a>
+        </div>
+        <div class="navbar-links">
+            <a href="homepage.html">HOME</a>
+            <a href="logout.html">LOGOUT</a>
+        </div>
+    </nav>
+    <div class="main-content">
+        <h2>Student List</h2>
+        <table>
+            <tr>
+                <th>Student IC</th>
+                <th>Student Name</th>
+                <th>Student Age</th>
+                <th>Student Email</th>
+                <th>Student Address</th>
+                <th>Guardian Name</th>
+                <th>Guardian Contact</th>
+                <th>Class ID</th>
+            </tr>
+            <tr>
+                <td>123456789012</td>
+                <td>John Doe</td>
+                <td>20</td>
+                <td>john.doe@example.com</td>
+                <td>123 Street Name</td>
+                <td>Jane Doe</td>
+                <td>0123456789</td>
+                <td>CLASS001</td>
+            </tr>
+            <!-- Repeat <tr>...</tr> as necessary for more students -->
+        </table>
+    </div>
+</body>
+</html>
