@@ -1,8 +1,13 @@
 <?php
 // Include the database connection file
-include 'dbconnection.php';
+include 'db_connection.php';
 
 session_start();
+
+// Enable error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the form data
@@ -18,51 +23,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("s", $userID);
         
         // Attempt to execute the prepared statement
-        $stmt->execute();
-        $stmt->store_result();
-        
-        // Check if the user exists
-        if ($stmt->num_rows == 1) {
-            // Bind result variables
-            $stmt->bind_result($hashed_password, $db_role);
-            $stmt->fetch();
+        if ($stmt->execute()) {
+            $stmt->store_result();
             
-            // Verify the password
-            if (password_verify($password, $hashed_password) && $role == $db_role) {
-                // Redirect to the appropriate homepage based on role
-                switch ($role) {
-                    case 'Student':
-                        header("Location: studentHomepage.php");
-                        break;
-                    case 'Instructor':
-                        header("Location: instructorHomepage.php");
-                        break;
-                    case 'Clerk':
-                        header("Location: clerkHomepage.php");
-                        break;
-                    case 'Principal':
-                        header("Location: principalHomepage.php");
-                        break;
-                    default:
-                        echo "Invalid role.";
-                        break;
+            // Check if the user exists
+            if ($stmt->num_rows == 1) {
+                // Bind result variables
+                $stmt->bind_result($hashed_password, $db_role);
+                $stmt->fetch();
+                
+                // Verify the password
+                if (password_verify($password, $hashed_password) && $role == $db_role) {
+                    // Redirect to the appropriate homepage based on role
+                    if ($role == 'Student') {
+                        header("Location: stuProfile.html");
+                        exit();
+                    } else {
+                        echo "Invalid role. This form is only for students.";
+                    }
+                } else {
+                    echo "Invalid user ID, password, or role.";
                 }
-                exit();
             } else {
-                echo "Invalid user ID, password, or role.";
+                echo "No account found with that user ID.";
             }
         } else {
-            echo "No account found with that user ID.";
+            echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
         }
+
+        // Close the statement
+        $stmt->close();
     } else {
         echo "ERROR: Could not prepare query: $sql. " . $conn->error;
     }
 
-    // Close the statement and connection
-    $stmt->close();
+    // Close the connection
     $conn->close();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,16 +131,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: white;
             text-align: center;
         }
-        .button-close .btn-close {
-            position: absolute;
-            background-color: transparent;
-            border: none;
-            font-size: 30px;
-            cursor: pointer;
-            right: 4px;
-            top: 2px;
-            color: white;
-        }
         .form-container h2 {
             color: white;
             margin-bottom: 20px;
@@ -204,30 +193,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </nav>
     <div class="container">
         <div class="form-container">
-            <div class="button-close">
-                <button class="btn-close">&times;</button>
-            </div>
             <h2>LOGIN</h2>
-            <label for="role">Role</label>
-            <select id="role" name="role">
-                <option value="Student">Student</option>
-                <option value="Clerk">Clerk</option>
-                <option value="Principal">Principal</option>
-                <option value="Instructor">Instructor</option>
-            </select>
-            <label for="userid">User ID</label>
-            <input type="text" id="userid" name="userid">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password">
-            <div class="button-confirm">
-                <button type="submit">LOG IN</button>
-            </div>
+            <form action="login.php" method="post">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="Student">Student</option>
+                    <option value="Clerk">Clerk</option>
+                    <option value="Principal">Principal</option>
+                    <option value="Instructor">Instructor</option>
+                </select>
+                <label for="userID">User ID</label>
+                <input type="text" id="userID" name="userID" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="button-confirm">
+                    <button type="submit">LOG IN</button>
+                </div>
+            </form>
         </div>
     </div>
-    <script>
-        document.querySelector('.btn-close').addEventListener('click', function() {
-            window.location.href = 'index.html';
-        });
-    </script>
 </body>
 </html>
