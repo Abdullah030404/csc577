@@ -227,7 +227,7 @@
             ?>
         </div>
         <p>
-            <a href="index.html" class="btn btn-primary">Back</a>
+            <a href="index.php" class="btn btn-primary">Back</a>
         </p>
     </div>
 </body>
