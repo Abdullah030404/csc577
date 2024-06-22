@@ -1,9 +1,54 @@
+<?php
+// Start session to access session variables
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Student') {
+    // Redirect to login page if not logged in or role is incorrect
+    header("Location: login.php");
+    exit;
+}
+
+// Include database connection file
+require_once "db_connection.php";
+
+// Fetch student details from database based on session variable
+$studentIC = $_SESSION['userID'];
+
+// Prepare and execute SQL query to retrieve student details
+$stmt = $conn->prepare("SELECT * FROM student WHERE studentIC = ?");
+$stmt->bind_param("s", $studentIC);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Check if student exists
+if ($result->num_rows === 1) {
+    // Fetch student details
+    $row = $result->fetch_assoc();
+    $studentName = $row['studentName'];
+    $studentAge = $row['studentAge'];
+    $studentEmail = $row['studentEmail'];
+    $studentAddress = $row['studentAddress'];
+    $guardianName = $row['guardianName'];
+    $guardianContact = $row['guardianContact'];
+    $classID = $row['classID'];
+} else {
+    // Redirect or handle error if student not found
+    echo "Error: Student not found.";
+    exit;
+}
+
+// Close prepared statement and database connection
+$stmt->close();
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Example</title>
+    <title>Student Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,6 +99,10 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
+        .page-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
         .form-group {
             margin-bottom: 20px;
         }
@@ -72,6 +121,7 @@
             display: flex;
             gap: 10px; /* Space between the buttons */
             margin-top: 20px; /* Adjust as needed */
+            justify-content: center;
         }
         .btn {
             padding: 10px 20px;
@@ -80,11 +130,11 @@
             border: none;
             border-radius: 4px;
             transition: background-color 0.3s ease;
+            text-decoration: none;
+            color: #fff;
         }
         .btn-primary {
             background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
         }
         .btn-primary:hover {
             background-color: #0056b3;
@@ -99,9 +149,8 @@
             </a>
         </div>
         <div class="navbar-links">
-            
-            <a href="stuProfile.html">PROFILE</a>
-            <a href="index.html">LOGOUT</a>
+            <a href="stuProfile.php">PROFILE</a>
+            <a href="logout.php">LOGOUT</a>
         </div>
     </nav>
     <div class="wrapper">
@@ -141,8 +190,7 @@
             <p class="form-control-static"><?php echo htmlspecialchars($classID); ?></p>
         </div>
         <div class="btn-container">
-            <a href="detailStudent.php" class="btn btn-primary">Back</a>
-            <a href="detailStudent.php" class="btn btn-primary">Update</a>
+            <a href="updateStudent.php" class="btn btn-primary">Update Profile</a>
         </div>
     </div>
 </body>

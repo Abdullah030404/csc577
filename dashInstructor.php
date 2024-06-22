@@ -57,14 +57,14 @@
 <body>
     <nav class="navbar">
         <div class="logo-container">
-            <a href="homepage.html">
+            <a href="index.html">
                 <img src="image/tahfiz.jpg" alt="Logo">
             </a>
         </div>
         <div class="navbar-links">
-            <a href="pricipalStudentList.html">STUDENT LIST</a>
-            <a href="pricipalReport.html">REPORT</a>
-            <a href="login.html">LOGIN</a>
+            <a href="stuProfile.html">STUDENT</a>
+            <a href="logout.php">LOGOUT</a>
+            
         </div>
     </nav>
     <div class="main-content">

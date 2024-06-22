@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-include 'dbconnection.php';
+include 'db_connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the form data
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 100px;
+            margin-top: 80px;
         }
         .form-container {
             position: relative;
@@ -158,12 +158,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <nav class="navbar">
     <div class="logo-container">
-        <a href="homepage.html">
+        <a href="index.html">
             <img src="image/tahfiz.jpg" alt="Logo">
         </a>
     </div>
     <div class="navbar-links">
-        <a href="login.html">LOGIN</a>
+        <a href="login.php">LOGIN</a>
+        <a href="register.php">REGISTER</a>
     </div>
 </nav>
 
@@ -193,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         <br>
         <div class="account">
-            <a href="login.html">Already have an account?</a>           
+            <a href="login.php">Already have an account?</a>           
         </div>
     </div>
 </div>
