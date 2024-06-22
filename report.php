@@ -273,7 +273,7 @@
             ?>
         </div>
         <div class="btn-container">
-            <a href="index.php" class="btn btn-primary">Back</a>
+            <a href="dashPrincipal.php" class="btn btn-primary">Back</a>
         </div>
     </div>
 </body>
