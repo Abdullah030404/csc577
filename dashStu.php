@@ -1,13 +1,21 @@
 <?php
 // Start session to access session variables
 session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Student') {
+    // Redirect to login page if not logged in or role is incorrect
+    header("Location: login.php");
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Example</title>
+    <title>Student Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,16 +53,20 @@ session_start();
             background-color: #ddd;
             color: black;
         }
-        .main-content {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 10px;
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin-top: 60px; /* Adjust to account for navbar height */
+        }
+        .content {
             text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px; /* Maximum width for the container */
-            width: 50%;
-            margin: auto;
-            margin-top: 200px;
         }
     </style>
 </head>
@@ -71,9 +83,12 @@ session_start();
             <a href="logout.php">LOGOUT</a>
         </div>
     </nav>
-    <div class="main-content">
-        <h1>Welcome Student to Maahad Tahfiz As Syifa' System</h1>
-        <p>This is the management system for Maahad Tahfiz As Syifa'.</p>
+    
+    <div class="container">
+        <div class="content">
+            <h1>Welcome Student to Maahad Tahfiz As Syifa' System</h1>
+            <p>This is the management system for Maahad Tahfiz As Syifa'.</p>
+        </div>
     </div>
 
 </body>

@@ -1,9 +1,21 @@
+<?php
+// Start session to access session variables
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Instructor') {
+    // Redirect to login page if not logged in or role is incorrect
+    header("Location: login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Example</title>
+    <title>Dashboard - Instructor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,15 +74,13 @@
             </a>
         </div>
         <div class="navbar-links">
-            <a href="stuProfile.html">STUDENT</a>
+            <a href="instructorStuList.php">STUDENT</a>
             <a href="logout.php">LOGOUT</a>
-            
         </div>
     </nav>
     <div class="main-content">
         <h1>Welcome to Maahad Tahfiz As Syifa' System</h1>
         <p>This is the management system for Maahad Tahfiz As Syifa'.</p>
     </div>
-
 </body>
 </html>

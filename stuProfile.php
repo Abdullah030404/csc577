@@ -16,7 +16,12 @@ require_once "db_connection.php";
 $studentIC = $_SESSION['userID'];
 
 // Prepare and execute SQL query to retrieve student details
-$stmt = $conn->prepare("SELECT * FROM student WHERE studentIC = ?");
+$stmt = $conn->prepare("
+    SELECT s.*, c.className 
+    FROM student s
+    JOIN class c ON s.classID = c.classID
+    WHERE s.studentIC = ?
+");
 $stmt->bind_param("s", $studentIC);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -31,7 +36,7 @@ if ($result->num_rows === 1) {
     $studentAddress = $row['studentAddress'];
     $guardianName = $row['guardianName'];
     $guardianContact = $row['guardianContact'];
-    $classID = $row['classID'];
+    $className = $row['className'];
 } else {
     // Redirect or handle error if student not found
     echo "Error: Student not found.";
@@ -149,6 +154,7 @@ $conn->close();
             </a>
         </div>
         <div class="navbar-links">
+            <a href="dashStu.php">HOME</a>
             <a href="stuProfile.php">PROFILE</a>
             <a href="logout.php">LOGOUT</a>
         </div>
@@ -186,11 +192,11 @@ $conn->close();
             <p class="form-control-static"><?php echo htmlspecialchars($guardianContact); ?></p>
         </div>
         <div class="form-group">
-            <label>Class ID</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($classID); ?></p>
+            <label>Class Name</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($className); ?></p>
         </div>
         <div class="btn-container">
-            <a href="updateStudent.php" class="btn btn-primary">Update Profile</a>
+            <a href="stuUpdate.php" class="btn btn-primary">Update </a>
         </div>
     </div>
 </body>

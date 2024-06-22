@@ -1,9 +1,90 @@
+<?php
+// Start session to access session variables
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Student') {
+    // Redirect to login page if not logged in or role is incorrect
+    header("Location: login.php");
+    exit;
+}
+
+// Include database connection file
+require_once "db_connection.php";
+
+// Fetch student details from database based on session variable
+$studentIC = $_SESSION['userID'];
+
+// Check if the form was submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the updated student details from the form
+    $studentName = $_POST['studentName'];
+    $studentAge = $_POST['studentAge'];
+    $studentEmail = $_POST['studentEmail'];
+    $studentAddress = $_POST['studentAddress'];
+    $guardianName = $_POST['guardianName'];
+    $guardianContact = $_POST['guardianContact'];
+
+    // Prepare and execute SQL query to update student details
+    $stmt = $conn->prepare("
+        UPDATE student 
+        SET studentName = ?, studentAge = ?, studentEmail = ?, studentAddress = ?, guardianName = ?, guardianContact = ?
+        WHERE studentIC = ?
+    ");
+    $stmt->bind_param("sisssss", $studentName, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $studentIC);
+
+    if ($stmt->execute()) {
+        // Redirect to profile page after successful update
+        header("Location: stuProfile.php");
+        exit;
+    } else {
+        // Handle error if update fails
+        echo "Error: Could not update student details.";
+    }
+
+    // Close prepared statement
+    $stmt->close();
+}
+
+// Fetch student details from database
+$stmt = $conn->prepare("
+    SELECT s.*, c.className 
+    FROM student s
+    JOIN class c ON s.classID = c.classID
+    WHERE s.studentIC = ?
+");
+$stmt->bind_param("s", $studentIC);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Check if student exists
+if ($result->num_rows === 1) {
+    // Fetch student details
+    $row = $result->fetch_assoc();
+    $studentName = $row['studentName'];
+    $studentAge = $row['studentAge'];
+    $studentEmail = $row['studentEmail'];
+    $studentAddress = $row['studentAddress'];
+    $guardianName = $row['guardianName'];
+    $guardianContact = $row['guardianContact'];
+    $className = $row['className'];
+} else {
+    // Redirect or handle error if student not found
+    echo "Error: Student not found.";
+    exit;
+}
+
+// Close prepared statement and database connection
+$stmt->close();
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Example</title>
+    <title>Update Student Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,6 +158,9 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        .form-control[readonly] {
+            background-color: #e9ecef;
+        }
         .btn {
             padding: 10px 20px;
             font-size: 16px;
@@ -114,62 +198,57 @@
             </a>
         </div>
         <div class="navbar-links">
-            <a href="stuProfile.html">PROFILE</a>
-            <a href="logout.html">LOGOUT</a>
+            <a href="stuProfile.php">PROFILE</a>
+            <a href="logout.php">LOGOUT</a>
         </div>
     </nav>
     <div class="wrapper">
         <div class="page-header">
             <h2>Update Student Profile</h2>
         </div>
-        <form action="updateStudent.php" method="post">
+        <form action="stuUpdate.php" method="post">
             <div class="form-group">
                 <label>Student IC Number</label>
-                <input type="text" name="studentIC" class="form-control" value="" readonly>
+                <input type="text" name="studentIC" class="form-control" value="<?php echo htmlspecialchars($studentIC); ?>" readonly>
             </div>
             <div class="form-group">
                 <label>Student Name</label>
-                <input type="text" name="studentName" class="form-control" value="">
+                <input type="text" name="studentName" class="form-control" value="<?php echo htmlspecialchars($studentName); ?>">
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
                 <label>Student Age</label>
-                <input type="text" name="studentAge" class="form-control" value="">
+                <input type="text" name="studentAge" class="form-control" value="<?php echo htmlspecialchars($studentAge); ?>">
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
                 <label>Student Email</label>
-                <input type="text" name="studentEmail" class="form-control" value="">
+                <input type="text" name="studentEmail" class="form-control" value="<?php echo htmlspecialchars($studentEmail); ?>">
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
                 <label>Student Address</label>
-                <input type="text" name="studentAddress" class="form-control" value="">
+                <input type="text" name="studentAddress" class="form-control" value="<?php echo htmlspecialchars($studentAddress); ?>">
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
                 <label>Guardian Name</label>
-                <input type="text" name="guardianName" class="form-control" value="">
+                <input type="text" name="guardianName" class="form-control" value="<?php echo htmlspecialchars($guardianName); ?>">
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
                 <label>Guardian Contact</label>
-                <input type="text" name="guardianContact" class="form-control" value="">
+                <input type="text" name="guardianContact" class="form-control" value="<?php echo htmlspecialchars($guardianContact); ?>">
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
-                <label>Student Address</label>
-                <input type="text" name="studentAddress" class="form-control" value="">
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <label>Class ID</label>
-                <input type="text" name="Class ID" class="form-control" value="">
+                <label>Class Name</label>
+                <input type="text" name="className" class="form-control" value="<?php echo htmlspecialchars($className); ?>" readonly>
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Submit">
-                <a href="detailStudent.php" class="btn btn-secondary">Cancel</a>
+                <a href="stuProfile.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>

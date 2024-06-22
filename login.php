@@ -72,6 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (hash_equals($hashed_password, hash('sha256', $password))) { // Use hash_equals for timing attacks
                 // Password is correct, redirect to appropriate dashboard
                 $_SESSION['userID'] = $db_userID; // Store user ID in session for further use
+                $_SESSION['role'] = $role; // Store role in session for further use
                 header("Location: {$redirectURL}");
                 exit();
             } else {
@@ -97,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Example</title>
+    <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -119,8 +120,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-left: 15px;
         }
         .logo-container img {
-            height: 50px; /* Adjust the height as needed */
-            margin-right: 10px; /* Adjust the spacing as needed */
+            height: 50px;
+            margin-right: 10px;
         }
         .navbar-links a {
             color: white;
@@ -140,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin-top: 60px; /* Adjust to account for navbar height */
+            margin-top: 60px;
         }
         .form-container {
             border: none;
@@ -164,17 +165,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: white;
             margin-left: 20px;
         }
-        /* Adjust select element */
         .form-container select,
         .form-container input[type="text"],
         .form-container input[type="password"] {
-            width: calc(100% - 20px); /* Subtract padding and border */
+            width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 10px;
             box-sizing: border-box;
-            font-size: 16px; /* Match font size if needed */
+            font-size: 16px;
         }
         .button-confirm button {
             width: 50%;
@@ -228,6 +228,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
     </div>
-
 </body>
 </html>
