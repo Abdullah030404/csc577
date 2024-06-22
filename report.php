@@ -3,59 +3,92 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Student Database Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tahfiz Database Report</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: peachpuff;
-            padding: 20px;
             margin: 0;
+            padding: 0;
+            background-color: #e1e7e0;
         }
-
-        .container {
+        .navbar {
+            background-color: #2b4560;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            padding: 0 20px;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+        .logo-container img {
+            height: 50px; /* Adjust the height as needed */
+            margin-right: 10px; /* Adjust the spacing as needed */
+        }
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 10px;
+            transition: background-color 0.3s ease;
+            font-family: Verdana, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .navbar-links a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .wrapper {
             max-width: 1200px;
             margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
-
-        .header {
+        .page-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
-
-        h2 {
-            color: #333;
-        }
-
         .section {
             margin-bottom: 40px;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
-
         table th,
         table td {
             padding: 10px;
             border: 1px solid #ddd;
             text-align: left;
         }
-
         table th {
             background-color: #f4f4f4;
             font-weight: bold;
         }
-
         .table-striped tbody tr:nth-child(odd) {
             background-color: #f9f9f9;
         }
-
         .table-striped tbody tr:nth-child(even) {
             background-color: #fff;
         }
-
+        .btn-container {
+            display: flex;
+            gap: 10px; /* Space between the buttons */
+            margin-top: 20px; /* Adjust as needed */
+            justify-content: center;
+        }
         .btn {
             padding: 10px 20px;
             font-size: 16px;
@@ -63,20 +96,33 @@
             border: none;
             border-radius: 4px;
             transition: background-color 0.3s ease;
-            margin-right: 10px;
+            text-decoration: none;
+            color: #fff;
         }
-
         .btn-primary {
             background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="image/tahfiz.jpg" alt="Logo">
+            </a>
+        </div>
+        <div class="navbar-links">
+            <a href="index.php">HOME</a>
+            <a href="report.php">REPORT</a>
+            <a href="logout.php">LOGOUT</a>
+        </div>
+    </nav>
+    <div class="wrapper">
+        <div class="page-header">
             <h1>Tahfiz Database Report</h1>
         </div>
 
@@ -226,9 +272,9 @@
             mysqli_close($dbCon);
             ?>
         </div>
-        <p>
+        <div class="btn-container">
             <a href="index.php" class="btn btn-primary">Back</a>
-        </p>
+        </div>
     </div>
 </body>
 
