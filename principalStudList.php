@@ -1,5 +1,5 @@
 <?php
-include_once "clerkHeader.php"; 
+include_once "principalHeader.php"; 
 
 // Fetch all student data from the database
 $query = "
@@ -97,7 +97,11 @@ $conn->close();
                     <td><?php echo htmlspecialchars($student['guardianName']); ?></td>
                     <td><?php echo htmlspecialchars($student['guardianContact']); ?></td>
                     <td><?php echo htmlspecialchars($student['classID']); ?></td>
-                    <td><a class="action-link" href="clerkUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a></td>
+                    <td>
+                        <a class="action-link" href="principalUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a>
+                        <!-- Add a link/button for Delete action -->
+                        <a class="action-link" href="principalDeleteStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>" onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>

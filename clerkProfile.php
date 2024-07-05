@@ -1,36 +1,33 @@
 <?php
-include_once "stuHeader.php"; 
+include_once "clerkHeader.php";
 
-// Fetch student details from database based on session variable
-$studentIC = $_SESSION['userID'];
+// Fetch clerk details from database based on session variable
+$staffID = $_SESSION['userID'];
 
-// Prepare and execute SQL query to retrieve student details and staff name
+// Prepare and execute SQL query to retrieve clerk details
 $stmt = $conn->prepare("
-    SELECT s.*, c.className, st.staffName 
-    FROM student s
-    JOIN class c ON s.classID = c.classID
-    JOIN staff st ON c.staffID = st.staffID
-    WHERE s.studentIC = ?
+    SELECT *
+    FROM staff
+    WHERE staffID = ?
 ");
-$stmt->bind_param("s", $studentIC);
+$stmt->bind_param("s", $staffID);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Check if student exists
+// Check if clerk exists
 if ($result->num_rows === 1) {
-    // Fetch student details
+    // Fetch clerk details
     $row = $result->fetch_assoc();
-    $studentName = $row['studentName'];
-    $studentAge = $row['studentAge'];
-    $studentEmail = $row['studentEmail'];
-    $studentAddress = $row['studentAddress'];
-    $guardianName = $row['guardianName'];
-    $guardianContact = $row['guardianContact'];
-    $className = $row['className'];
+    $staffID = $row['staffID'];
     $staffName = $row['staffName'];
+    $staffEmail = $row['staffEmail'];
+    $staffContact = $row['staffContact'];
+    $qualification = $row['qualification'];
+    // staffPass should not be displayed directly in a profile page for security reasons
+    // If needed, it should only be displayed in a form for update purposes
 } else {
-    // Redirect or handle error if student not found
-    echo "Error: Student not found.";
+    // Redirect or handle error if clerk not found
+    echo "Error: Clerk not found.";
     exit;
 }
 
@@ -44,7 +41,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Profile</title>
+    <title>Clerk Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -106,46 +103,31 @@ $conn->close();
 <body>
     <div class="wrapper">
         <div class="page-header">
-            <h1>View Student Profile</h1>
+            <h1>View Clerk Profile</h1>
         </div>
         <div class="form-group">
-            <label>Student IC</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($studentIC); ?></p>
+            <label>Staff ID</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($staffID); ?></p>
         </div>
         <div class="form-group">
-            <label>Student Name</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($studentName); ?></p>
-        </div>
-        <div class="form-group">
-            <label>Student Age</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($studentAge); ?></p>
-        </div>
-        <div class="form-group">
-            <label>Student Email</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($studentEmail); ?></p>
-        </div>
-        <div class="form-group">
-            <label>Student Address</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($studentAddress); ?></p>
-        </div>
-        <div class="form-group">
-            <label>Guardian Name</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($guardianName); ?></p>
-        </div>
-        <div class="form-group">
-            <label>Guardian Contact</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($guardianContact); ?></p>
-        </div>
-        <div class="form-group">
-            <label>Class Name</label>
-            <p class="form-control-static"><?php echo htmlspecialchars($className); ?></p>
-        </div>
-        <div class="form-group">
-            <label>Mentor Name</label>
+            <label>Staff Name</label>
             <p class="form-control-static"><?php echo htmlspecialchars($staffName); ?></p>
         </div>
+        <div class="form-group">
+            <label>Staff Email</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($staffEmail); ?></p>
+        </div>
+        <div class="form-group">
+            <label>Staff Contact</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($staffContact); ?></p>
+        </div>
+        <div class="form-group">
+            <label>Qualification</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($qualification); ?></p>
+        </div>
         <div class="btn-container">
-            <a href="stuUpdate.php" class="btn btn-primary">Update</a>
+            <!-- Update button or link -->
+            <a href="clerkUpdate.php" class="btn btn-primary">Update</a>
         </div>
     </div>
 </body>
