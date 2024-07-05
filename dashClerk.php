@@ -62,8 +62,8 @@
             </a>
         </div>
         <div class="navbar-links">
-            <a href="dashClerk.html">HOME</a>
-            <a href="detailStu.php">STUDENT</a>
+            <a href="dashClerk.php">HOME</a>
+            <a href="clerkStudList.php">STUDENT</a>
             <a href="report.php">REPORT</a>
             <a href="logout.php">LOGOUT</a>
         </div>

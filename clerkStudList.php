@@ -1,3 +1,34 @@
+<?php
+// Start the session
+session_start();
+
+// Check if the user is logged in and is a clerk
+if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Clerk') {
+    // Redirect to login page if not logged in or if role is incorrect
+    header("Location: login.php");
+    exit;
+}
+
+// Include database connection file
+require_once "db_connection.php";
+
+// Fetch all student data from the database
+$query = "
+    SELECT studentIC, studentPass, studentName, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID
+    FROM student
+";
+$result = $conn->query($query);
+
+// Fetch student data
+$students = [];
+while ($row = $result->fetch_assoc()) {
+    $students[] = $row;
+}
+
+// Close the database connection
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,17 +100,25 @@
             background-color: #2b4560;
             color: white;
         }
+        .action-link {
+            color: #2b4560;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .action-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="logo-container">
-            <a href="dashInstructor.php">
+            <a href="dashClerk.php">
                 <img src="image/tahfiz.jpg" alt="Logo">
             </a>
         </div>
         <div class="navbar-links">
-            <a href="dashInstructor.php">HOME</a>
+            <a href="dashClerk.php">HOME</a>
             <a href="logout.php">LOGOUT</a>
         </div>
     </nav>
@@ -88,6 +127,7 @@
         <table>
             <tr>
                 <th>Student IC</th>
+                <th>Student Pass</th>
                 <th>Student Name</th>
                 <th>Student Age</th>
                 <th>Student Email</th>
@@ -95,18 +135,22 @@
                 <th>Guardian Name</th>
                 <th>Guardian Contact</th>
                 <th>Class ID</th>
+                <th>Action</th>
             </tr>
-            <tr>
-                <td>123456789012</td>
-                <td>John Doe</td>
-                <td>20</td>
-                <td>john.doe@example.com</td>
-                <td>123 Street Name</td>
-                <td>Jane Doe</td>
-                <td>0123456789</td>
-                <td>CLASS001</td>
-            </tr>
-            
+            <?php foreach ($students as $student): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($student['studentIC']); ?></td>
+                    <td><?php echo htmlspecialchars($student['studentPass']); ?></td>
+                    <td><?php echo htmlspecialchars($student['studentName']); ?></td>
+                    <td><?php echo htmlspecialchars($student['studentAge']); ?></td>
+                    <td><?php echo htmlspecialchars($student['studentEmail']); ?></td>
+                    <td><?php echo htmlspecialchars($student['studentAddress']); ?></td>
+                    <td><?php echo htmlspecialchars($student['guardianName']); ?></td>
+                    <td><?php echo htmlspecialchars($student['guardianContact']); ?></td>
+                    <td><?php echo htmlspecialchars($student['classID']); ?></td>
+                    <td><a class="action-link" href="clerkUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a></td>
+                </tr>
+            <?php endforeach; ?>
         </table>
     </div>
 </body>

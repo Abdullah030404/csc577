@@ -15,11 +15,12 @@ require_once "db_connection.php";
 // Fetch student details from database based on session variable
 $studentIC = $_SESSION['userID'];
 
-// Prepare and execute SQL query to retrieve student details
+// Prepare and execute SQL query to retrieve student details and staff name
 $stmt = $conn->prepare("
-    SELECT s.*, c.className 
+    SELECT s.*, c.className, st.staffName 
     FROM student s
     JOIN class c ON s.classID = c.classID
+    JOIN staff st ON c.staffID = st.staffID
     WHERE s.studentIC = ?
 ");
 $stmt->bind_param("s", $studentIC);
@@ -37,6 +38,7 @@ if ($result->num_rows === 1) {
     $guardianName = $row['guardianName'];
     $guardianContact = $row['guardianContact'];
     $className = $row['className'];
+    $staffName = $row['staffName'];
 } else {
     // Redirect or handle error if student not found
     echo "Error: Student not found.";
@@ -195,8 +197,12 @@ $conn->close();
             <label>Class Name</label>
             <p class="form-control-static"><?php echo htmlspecialchars($className); ?></p>
         </div>
+        <div class="form-group">
+            <label>Mentor Name</label>
+            <p class="form-control-static"><?php echo htmlspecialchars($staffName); ?></p>
+        </div>
         <div class="btn-container">
-            <a href="stuUpdate.php" class="btn btn-primary">Update </a>
+            <a href="stuUpdate.php" class="btn btn-primary">Update</a>
         </div>
     </div>
 </body>

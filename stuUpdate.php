@@ -48,9 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Fetch student details from database
 $stmt = $conn->prepare("
-    SELECT s.*, c.className 
+    SELECT s.*, c.className, st.staffName as mentorName 
     FROM student s
     JOIN class c ON s.classID = c.classID
+    JOIN staff st ON c.staffID = st.staffID
     WHERE s.studentIC = ?
 ");
 $stmt->bind_param("s", $studentIC);
@@ -68,6 +69,7 @@ if ($result->num_rows === 1) {
     $guardianName = $row['guardianName'];
     $guardianContact = $row['guardianContact'];
     $className = $row['className'];
+    $mentorName = $row['mentorName'];
 } else {
     // Redirect or handle error if student not found
     echo "Error: Student not found.";
@@ -244,6 +246,11 @@ $conn->close();
             <div class="form-group">
                 <label>Class Name</label>
                 <input type="text" name="className" class="form-control" value="<?php echo htmlspecialchars($className); ?>" readonly>
+                <span class="help-block"></span>
+            </div>
+            <div class="form-group">
+                <label>Mentor Name</label>
+                <input type="text" name="mentorName" class="form-control" value="<?php echo htmlspecialchars($mentorName); ?>" readonly>
                 <span class="help-block"></span>
             </div>
             <div class="form-group">
