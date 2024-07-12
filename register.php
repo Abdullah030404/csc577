@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the form data
     $studentIC = $_POST['studentIC'];
     $studentName = $_POST['studentName'];
+    $studentPass = $_POST['studentPass'];
     $studentAge = $_POST['studentAge'];
     $studentEmail = $_POST['studentEmail'];
     $studentAddress = $_POST['studentAddress'];
@@ -13,22 +14,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $guardianContact = $_POST['guardianContact'];
     $classID = $_POST['classID'];
 
-    // Prepare the SQL statement
-    $sql = "INSERT INTO student (studentIC, studentName, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    
-    // Prepare the statement
-    if ($stmt = $conn->prepare($sql)) {
-        // Bind the variables to the prepared statement as parameters
-        $stmt->bind_param("ssissssi", $studentIC, $studentName, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $classID);
-        
-        // Attempt to execute the prepared statement
-        if ($stmt->execute()) {
-            echo "Record inserted successfully.";
+    // Check if the studentIC and studentName exist in registered_students
+    $checkQuery = "SELECT * FROM registered_students WHERE studentIC = ? AND studentName = ?";
+    if ($checkStmt = $conn->prepare($checkQuery)) {
+        $checkStmt->bind_param("ss", $studentIC, $studentName);
+        $checkStmt->execute();
+        $result = $checkStmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // If studentIC and studentName match, proceed with registration
+            $sql = "INSERT INTO student (studentIC, studentName, studentPass, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            if ($stmt = $conn->prepare($sql)) {
+                $stmt->bind_param("sssissssi", $studentIC, $studentName, $studentPass, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $classID);
+                
+                if ($stmt->execute()) {
+                    echo "Record inserted successfully.";
+                } else {
+                    echo "ERROR: Could not execute query: $sql. " . $conn->error;
+                }
+            } else {
+                echo "ERROR: Could not prepare query: $sql. " . $conn->error;
+            }
         } else {
-            echo "ERROR: Could not execute query: $sql. " . $conn->error;
+            echo "ERROR: Student IC and Name do not match records. Please check your details.";
         }
+
+        $checkStmt->close();
     } else {
-        echo "ERROR: Could not prepare query: $sql. " . $conn->error;
+        echo "ERROR: Could not prepare query: $checkQuery. " . $conn->error;
     }
 
     // Close the statement and connection
@@ -36,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,7 +133,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .form-container input[type="text"],
         .form-container input[type="number"],
-        .form-container input[type="email"] {
+        .form-container input[type="email"],
+        .form-container input[type="password"] {
             width: 90%;
             padding: 10px;
             margin-bottom: 10px;
@@ -171,17 +187,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container">
     <div class="form-container">
         <h2>Student Registration</h2>
-        <form action="register_student.php" method="post">
+        <form action="register.php" method="post">
             <label for="studentIC">Student IC</label>
             <input type="text" id="studentIC" name="studentIC" maxlength="14" required>
             <label for="studentName">Student Name</label>
             <input type="text" id="studentName" name="studentName" maxlength="30" required>
+            <label for="studentPass">Student Password</label>
+            <input type="password" id="studentPass" name="studentPass" maxlength="30" required>
             <label for="studentAge">Student Age</label>
             <input type="number" id="studentAge" name="studentAge" required>
             <label for="studentEmail">Student Email</label>
             <input type="email" id="studentEmail" name="studentEmail" maxlength="30" required>
             <label for="studentAddress">Student Address</label>
-            <input type="text" id="studentAddress" name="studentAddress" maxlength="30" required>
+            <input type="text" id="studentAddress" name="studentAddress" maxlength="100" required>
             <label for="guardianName">Guardian Name</label>
             <input type="text" id="guardianName" name="guardianName" maxlength="30" required>
             <label for="guardianContact">Guardian Contact</label>

@@ -77,136 +77,170 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Student Profile</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e1e7e0;
+        :root {
+            --primary-color: #2b4560;
+            --secondary-color: #ffffff;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --border-radius: 12px;
+            --background-color: #f0f4f8;
         }
-        .wrapper {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+
+        .update-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
-        
-        .main-content {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 10px;
+
+        .update-header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 2rem;
             text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px; /* Maximum width for the container */
-            width: 50%;
-            margin: auto;
-            margin-top: 200px;
+            font-size: 1.5em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
+
+        .update-content {
+            padding: 2rem;
+        }
+
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
-            font-weight: bold;
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-size: 0.9em;
+            text-transform: uppercase;
         }
 
         .form-control {
             width: 100%;
-            padding: 8px;
-            font-size: 16px;
+            padding: 0.75rem 1rem;
+            font-size: 1em;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
         }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(43, 69, 96, 0.2);
+        }
+
         .form-control[readonly] {
-            background-color: #e9ecef;
+            background-color: var(--background-color);
+            cursor: not-allowed;
         }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
         .btn {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1em;
             cursor: pointer;
             border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-            margin-right: 10px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .btn-primary {
-            background-color: #007bff;
-            color: #fff;
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
 
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #ff4757;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
         }
 
         .btn-secondary {
             background-color: #6c757d;
-            color: #fff;
+            color: var(--secondary-color);
         }
 
         .btn-secondary:hover {
             background-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .update-container {
+                width: 90%;
+                margin: 1rem auto;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="page-header">
+    <div class="update-container">
+        <div class="update-header">
             <h2>Update Student Profile</h2>
         </div>
-        <form action="stuUpdate.php" method="post">
-            <div class="form-group">
-                <label>Student IC Number</label>
-                <input type="text" name="studentIC" class="form-control" value="<?php echo htmlspecialchars($studentIC); ?>" readonly>
-            </div>
-            <div class="form-group">
-                <label>Student Name</label>
-                <input type="text" name="studentName" class="form-control" value="<?php echo htmlspecialchars($studentName); ?>">
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <label>Student Age</label>
-                <input type="text" name="studentAge" class="form-control" value="<?php echo htmlspecialchars($studentAge); ?>">
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <label>Student Email</label>
-                <input type="text" name="studentEmail" class="form-control" value="<?php echo htmlspecialchars($studentEmail); ?>">
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <label>Student Address</label>
-                <input type="text" name="studentAddress" class="form-control" value="<?php echo htmlspecialchars($studentAddress); ?>">
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <label>Guardian Name</label>
-                <input type="text" name="guardianName" class="form-control" value="<?php echo htmlspecialchars($guardianName); ?>">
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <label>Guardian Contact</label>
-                <input type="text" name="guardianContact" class="form-control" value="<?php echo htmlspecialchars($guardianContact); ?>">
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <label>Class Name</label>
-                <input type="text" name="className" class="form-control" value="<?php echo htmlspecialchars($className); ?>" readonly>
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <label>Mentor Name</label>
-                <input type="text" name="mentorName" class="form-control" value="<?php echo htmlspecialchars($mentorName); ?>" readonly>
-                <span class="help-block"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
-                <a href="stuProfile.php" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+        <div class="update-content">
+            <form action="stuUpdate.php" method="post">
+                <div class="form-group">
+                    <label>Student IC Number</label>
+                    <input type="text" name="studentIC" class="form-control" value="<?php echo htmlspecialchars($studentIC); ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Student Name</label>
+                    <input type="text" name="studentName" class="form-control" value="<?php echo htmlspecialchars($studentName); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Student Age</label>
+                    <input type="text" name="studentAge" class="form-control" value="<?php echo htmlspecialchars($studentAge); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Student Email</label>
+                    <input type="text" name="studentEmail" class="form-control" value="<?php echo htmlspecialchars($studentEmail); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Student Address</label>
+                    <input type="text" name="studentAddress" class="form-control" value="<?php echo htmlspecialchars($studentAddress); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Guardian Name</label>
+                    <input type="text" name="guardianName" class="form-control" value="<?php echo htmlspecialchars($guardianName); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Guardian Contact</label>
+                    <input type="text" name="guardianContact" class="form-control" value="<?php echo htmlspecialchars($guardianContact); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Class Name</label>
+                    <input type="text" name="className" class="form-control" value="<?php echo htmlspecialchars($className); ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Mentor Name</label>
+                    <input type="text" name="mentorName" class="form-control" value="<?php echo htmlspecialchars($mentorName); ?>" readonly>
+                </div>
+                <div class="btn-container">
+                    <input type="submit" class="btn btn-primary" value="Update">
+                    <a href="stuProfile.php" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>
