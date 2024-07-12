@@ -19,13 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $redirectURL = "";
     $tableName = "";
     $passwordColumnName = "";
+    $columnID = "";
 
     // Determine the table and column to query based on role
     switch ($role) {
         case 'Student':
             $tableName = 'student';
             $columnID = 'studentIC';
-            $passwordColumnName = 'studentPass_hashed';
+            $passwordColumnName = 'studentPass'; // Updated to use plain text password
             $redirectURL = 'dashStu.php';
             break;
         case 'Clerk':
@@ -33,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case 'Principal':
             $tableName = 'staff';
             $columnID = 'staffID';
-            $passwordColumnName = 'staffPass_hashed';
+            $passwordColumnName = 'staffPass'; // Updated to use plain text password
             switch ($role) {
                 case 'Clerk':
                     $redirectURL = 'dashClerk.php';
@@ -65,11 +66,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if the user exists
         if ($stmt->num_rows == 1) {
             // Bind result variables
-            $stmt->bind_result($db_userID, $hashed_password);
+            $stmt->bind_result($db_userID, $db_password);
             $stmt->fetch();
 
             // Verify the password
-            if (hash_equals($hashed_password, hash('sha256', $password))) { // Use hash_equals for timing attacks
+            if ($password === $db_password) { // Compare plain text passwords
                 // Password is correct, redirect to appropriate dashboard
                 $_SESSION['userID'] = $db_userID; // Store user ID in session for further use
                 $_SESSION['role'] = $role; // Store role in session for further use
@@ -194,8 +195,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo-container">
+<nav class="navbar">
+<div class="logo-container">
             <a href="index.html">
                 <img src="image/tahfiz.jpg" alt="Logo">
             </a>

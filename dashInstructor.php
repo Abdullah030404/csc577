@@ -74,6 +74,7 @@ if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Instructor') {
             </a>
         </div>
         <div class="navbar-links">
+            <a href="instructorProfile.php">PROFILE</a>
             <a href="instructorStuList.php">STUDENT</a>
             <a href="logout.php">LOGOUT</a>
         </div>
