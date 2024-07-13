@@ -1,5 +1,5 @@
 <?php
-include_once "instructorHeader.php";
+include_once "instructorHeader.php"; 
 require_once "db_connection.php";
 
 $instructorID = $_SESSION['userID'];
@@ -8,6 +8,8 @@ $staffName = "";
 $staffEmail = "";
 $staffContact = "";
 $qualification = "";
+$staffPass = "";
+$updateSuccess = false;
 $errorMessages = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -26,14 +28,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessages[] = "Invalid email format.";
     }
 
+    if (!preg_match('/^\d{3}-\d{3} \d{4}$/', $staffContact)) {
+        $errorMessages[] = "Contact must be in the form '###-### ####'.";
+    }
+
     if (strlen($staffPass) < 6) {
         $errorMessages[] = "Password must be at least 6 characters long.";
+    } else {
+        $staffPass_hashed = hash('sha256', $staffPass);
     }
 
     if (empty($errorMessages)) {
         $query = "UPDATE staff SET staffName = ?, staffEmail = ?, staffContact = ?, qualification = ?, staffPass = ? WHERE staffID = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssssss", $staffName, $staffEmail, $staffContact, $qualification, $staffPass, $staffID);
+        $stmt->bind_param("ssssss", $staffName, $staffEmail, $staffContact, $qualification, $staffPass_hashed, $staffID);
 
         if ($stmt->execute()) {
             $updateSuccess = true;
@@ -43,35 +51,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 } else {
-    $query = "SELECT staffID, staffName, staffEmail, staffContact, qualification, staffPass FROM staff WHERE staffID = ?";
+    $query = "SELECT staffID, staffName, staffEmail, staffContact, qualification FROM staff WHERE staffID = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $instructorID);
     $stmt->execute();
     $result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
-    $instructor = $result->fetch_assoc();
-    $staffID = $instructor['staffID'];
-    $staffName = $instructor['staffName'];
-    $staffEmail = $instructor['staffEmail'];
-    $staffContact = $instructor['staffContact'];
-    $qualification = $instructor['qualification'];
-} else {
-    $errorMessages[] = "Instructor not found.";
+    if ($result->num_rows > 0) {
+        $instructor = $result->fetch_assoc();
+        $staffID = $instructor['staffID'];
+        $staffName = $instructor['staffName'];
+        $staffEmail = $instructor['staffEmail'];
+        $staffContact = $instructor['staffContact'];
+        $qualification = $instructor['qualification'];
+    } else {
+        $errorMessages[] = "Instructor not found.";
+    }
+    $stmt->close();
 }
-$stmt->close();
+
 $conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instructor Profile</title>
+    <title>Update Instructor Profile</title>
     <style>
-        /* Same CSS as before */
+        /* Same CSS as in instructorProfile.php */
         :root {
             --primary-color: #2b4560;
             --secondary-color: #ffffff;
@@ -110,6 +119,11 @@ $conn->close();
             padding: 2rem;
         }
 
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -132,8 +146,15 @@ $conn->close();
             transition: border-color 0.3s ease;
         }
 
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
         .btn-submit {
-            background: linear-gradient(135deg, var(--accent-color), #ff4757);
+            background-color: var(--accent-color);
             color: var(--secondary-color);
             padding: 0.75rem 1.5rem;
             border: none;
@@ -145,16 +166,13 @@ $conn->close();
             letter-spacing: 1px;
             transition: all 0.3s ease;
             align-self: center;
-            margin-top: 2rem;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-            text-decoration: none;
-            display: inline-block;
+            margin-top: 1rem;
         }
 
         .btn-submit:hover {
-            background: linear-gradient(135deg, #ff6b6b, #ff7f7f);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+            background-color: #ff4757;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
         }
 
         .error-messages {
@@ -177,13 +195,41 @@ $conn->close();
             }
         }
     </style>
+    <script>
+        function validateForm() {
+            var namePattern = /^[A-Za-z@ ]+$/;
+            var staffName = document.getElementById("staffName").value;
+            var staffPass = document.getElementById("staffPass").value;
+            var staffContact = document.getElementById("staffContact").value;
+            var contactPattern = /^\d{3}-\d{3} \d{4}$/;
 
+            if (!namePattern.test(staffName)) {
+                alert("Name can only contain letters, spaces, or @.");
+                return false;
+            }
+
+            if (staffPass.length < 6) {
+                alert("Password must be at least 6 characters long.");
+                return false;
+            }
+
+            if (!contactPattern.test(staffContact)) {
+                alert("Contact must be in the form '###-### ####'.");
+                return false;
+            }
+
+            return true;
+        }
+
+        <?php if ($updateSuccess): ?>
+        alert("Data has been updated.");
+        <?php endif; ?>
+    </script>
 </head>
-
 <body>
     <div class="profile-container">
         <div class="profile-header">
-            <h2>Instructor Profile</h2>
+            <h2>Update Instructor Profile</h2>
         </div>
         <div class="profile-content">
             <?php if (!empty($errorMessages)): ?>
@@ -196,77 +242,37 @@ $conn->close();
             <form method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="staffID">Staff ID:</label>
-                    <input type="text" id="staffID" name="staffID" value="<?php echo htmlspecialchars($staffID); ?>"
-                        readonly>
+                    <input type="text" id="staffID" name="staffID" value="<?php echo htmlspecialchars($staffID); ?>" readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="staffName">Name:</label>
-                    <input type="text" id="staffName" name="staffName"
-                        value="<?php echo htmlspecialchars($staffName); ?>" pattern="[A-Za-z\s]+"
-                        title="Only letters and spaces are allowed" required>
+                    <input type="text" id="staffName" name="staffName" value="<?php echo htmlspecialchars($staffName); ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="staffEmail">Email:</label>
-                    <input type="email" id="staffEmail" name="staffEmail"
-                        value="<?php echo htmlspecialchars($staffEmail); ?>" required>
+                    <input type="email" id="staffEmail" name="staffEmail" value="<?php echo htmlspecialchars($staffEmail); ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="staffContact">Contact:</label>
-                    <input type="text" id="staffContact" name="staffContact"
-                        value="<?php echo htmlspecialchars($staffContact); ?>" pattern="01\d-\d{7}"
-                        title="Format: 01#-#######" required>
+                    <input type="text" id="staffContact" name="staffContact" value="<?php echo htmlspecialchars($staffContact); ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="qualification">Qualification:</label>
-                    <input type="text" id="qualification" name="qualification"
-                        value="<?php echo htmlspecialchars($qualification); ?>" pattern="[A-Za-z\s]+"
-                        title="Only letters and spaces are allowed" required>
+                    <input type="text" id="qualification" name="qualification" value="<?php echo htmlspecialchars($qualification); ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="staffPass">Password:</label>
-                    <input type="password" id="staffPass" name="staffPass"
-                        value="<?php echo htmlspecialchars($staffPass); ?>" required>
+                    <input type="password" id="staffPass" name="staffPass" value="<?php echo htmlspecialchars($staffPass); ?>" required>
                 </div>
 
-                <button type="submit" class="btn-submit">Update Profile</button>
+                <button type="submit" class="btn-submit">SAVE</button>
             </form>
         </div>
-        <script>
-            function validateForm() {
-                var namePattern = /^[A-Za-z@ ]+$/;
-                var staffName = document.getElementById("staffName").value;
-                var staffPass = document.getElementById("staffPass").value;
-                var staffContact = document.getElementById("staffContact").value;
-                var contactPattern = /^01\d-\d{7}$/;
-
-                if (!namePattern.test(staffName)) {
-                    alert("Name can only contain letters, spaces, or @.");
-                    return false;
-                }
-
-                if (staffPass.length < 6) {
-                    alert("Password must be at least 6 characters long.");
-                    return false;
-                }
-
-                if (!contactPattern.test(staffContact)) {
-                    alert("Contact must be in the form '01#-#######'.");
-                    return false;
-                }
-
-                return true;
-            }
-
-            <?php if ($updateSuccess): ?>
-                alert("Data has been updated.");
-            <?php endif; ?>
-        </script>
     </div>
 </body>
-
 </html>

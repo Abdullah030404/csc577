@@ -104,9 +104,11 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
     <nav class="navbar">
         <div class="navbar-content">
             <div class="logo-container">
-                <a href="dashInstructor.php">MAAHAD TAHFIZ AS SYIFA</a>
+                <a href="dashClerk.php">MAAHAD TAHFIZ AS SYIFA</a>
             </div>
         <div class="navbar-links">
+            <a href="clerkAddClass.php">CLASS</a>
+            <a href="clerkAddInstructor.php">INSTRUCTOR</a>
             <a href="clerkProfile.php">PROFILE</a>
             <a href="clerkStudList.php">STUDENT</a>
             <a href="clerkReport.php">REPORT</a>
