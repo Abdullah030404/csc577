@@ -84,7 +84,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         }
 
         main {
-            padding-top: 40px;
+            padding-top: 20px;
         }
 
         .header {
