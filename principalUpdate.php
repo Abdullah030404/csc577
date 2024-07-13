@@ -80,99 +80,156 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Principal Details</title>
     <style>
+        :root {
+            --primary-color: #2b4560;
+            --secondary-color: #ffffff;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --border-radius: 12px;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
             margin: 0;
             padding: 0;
-            background-color: #e1e7e0;
         }
-        .wrapper {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+
+        .profile-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
-        .page-header {
+
+        .profile-header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 2rem;
             text-align: center;
-            margin-bottom: 20px;
+            font-size: 1.5em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
+
+        .profile-content {
+            padding: 2rem;
+        }
+
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
+
         .form-group label {
-            font-weight: bold;
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-size: 0.9em;
+            text-transform: uppercase;
         }
+
         .form-control {
-            padding: 7px 12px;
-            margin-bottom: 0;
-            line-height: 1.5;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #fff;
             width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            font-size: 1em;
+            color: var(--text-color);
+            transition: all 0.3s ease;
         }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+        }
+
         .btn-container {
             display: flex;
-            gap: 10px; /* Space between the buttons */
-            margin-top: 20px; /* Adjust as needed */
             justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
         }
+
         .btn {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1em;
             cursor: pointer;
             border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
+            border-radius: 50px;
+            transition: all 0.3s ease;
             text-decoration: none;
-            color: #fff;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
+
         .btn-primary {
-            background-color: #007bff;
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
+
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #ff4757;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
         }
-        .error-message {
-            color: red;
-            font-size: 14px;
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .profile-content {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="page-header">
-            <h1>Update Principal Details</h1>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h2>Update Principal Details</h2>
         </div>
-        <form action="principalUpdate.php" method="post">
-            <div class="form-group">
-                <label for="staffID">Staff ID</label>
-                <input type="text" id="staffID" name="staffID" value="<?php echo htmlspecialchars($staffID); ?>" readonly>
-            </div>
-            <div class="form-group">
-                <label for="staffName">Staff Name</label>
-                <input type="text" id="staffName" name="staffName" value="<?php echo htmlspecialchars($staffName); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="staffEmail">Staff Email</label>
-                <input type="email" id="staffEmail" name="staffEmail" value="<?php echo htmlspecialchars($staffEmail); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="staffContact">Staff Contact</label>
-                <input type="text" id="staffContact" name="staffContact" value="<?php echo htmlspecialchars($staffContact); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="qualification">Qualification</label>
-                <input type="text" id="qualification" name="qualification" value="<?php echo htmlspecialchars($qualification); ?>" required>
-            </div>
-            <div class="btn-container">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <a href="principalProfile.php" class="btn btn-primary">Cancel</a>
-            </div>
-        </form>
+        <div class="profile-content">
+            <form action="principalUpdate.php" method="post">
+                <div class="form-group">
+                    <label for="staffID">Staff ID</label>
+                    <input type="text" id="staffID" name="staffID" class="form-control" value="<?php echo htmlspecialchars($staffID); ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="staffName">Staff Name</label>
+                    <input type="text" id="staffName" name="staffName" class="form-control" value="<?php echo htmlspecialchars($staffName); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="staffEmail">Staff Email</label>
+                    <input type="email" id="staffEmail" name="staffEmail" class="form-control" value="<?php echo htmlspecialchars($staffEmail); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="staffContact">Staff Contact</label>
+                    <input type="text" id="staffContact" name="staffContact" class="form-control" value="<?php echo htmlspecialchars($staffContact); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="qualification">Qualification</label>
+                    <input type="text" id="qualification" name="qualification" class="form-control" value="<?php echo htmlspecialchars($qualification); ?>" required>
+                </div>
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="principalProfile.php" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>

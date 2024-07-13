@@ -24,7 +24,7 @@ $stmt->close();
 
 // Prepare and execute SQL query to fetch students under the instructor's class
 $studentQuery = "
-    SELECT s.studentIC, s.studentName, s.studentAge, s.studentEmail, s.studentAddress, s.guardianName, s.guardianContact
+    SELECT s.studentIC, s.studentName, s.studentAge, s.studentEmail, s.studentAddress, s.guardianName, s.guardianContact, c.className
     FROM student s
     JOIN class c ON s.classID = c.classID
     WHERE c.staffID = ?
@@ -163,7 +163,7 @@ $conn->close();
 <body>
     <div class="student-list-container">
         <div class="student-list-header">
-            <h2><?php echo htmlspecialchars($className); ?> Class - Student List</h2>
+            <h2>STUDENT LIST</h2>
         </div>
         <div class="student-list-content">
             <table class="student-table">
@@ -176,6 +176,7 @@ $conn->close();
                         <th>Address</th>
                         <th>Guardian Name</th>
                         <th>Guardian Contact</th>
+                        <th>Class Name</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -188,6 +189,7 @@ $conn->close();
                             <td><?php echo htmlspecialchars($student['studentAddress']); ?></td>
                             <td><?php echo htmlspecialchars($student['guardianName']); ?></td>
                             <td><?php echo htmlspecialchars($student['guardianContact']); ?></td>
+                            <td><?php echo htmlspecialchars($student['className']); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

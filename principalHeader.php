@@ -11,69 +11,108 @@ if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Principal') {
 
 // Include database connection file if needed
 require_once "db_connection.php"; // Uncomment if you need to include database connection
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hostel Management System</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary-color: #2b4560;
+            --secondary-color: #ffffff;
+            --hover-color: #3a5f81;
+            --background-color: #f0f4f8;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background-color: #e1e7e0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            line-height: 1.6;
+        }
+
         .navbar {
-            background-color: #2b4560;
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: static;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 60px;
-            padding: 0 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
+
         .logo-container {
             display: flex;
             align-items: center;
-            margin-left: 15px;
         }
-        .logo-container img {
-            height: 50px; /* Adjust the height as needed */
-            margin-right: 10px; /* Adjust the spacing as needed */
+
+        .logo-container a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
         }
+
+        .logo-container a:hover {
+            color: #f0f0f0;
+        }
+
         .navbar-links {
             display: flex;
+            gap: 1.5rem;
         }
+
         .navbar-links a {
-            color: white;
+            color: var(--secondary-color);
             text-decoration: none;
-            padding: 10px 15px;
-            transition: background-color 0.3s ease;
-            font-family: Verdana, sans-serif;
-            font-weight: bold;
-            font-size: 18px;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
         .navbar-links a:hover {
-            background-color: #1e2e3b;
+            background-color: var(--hover-color);
+            color: var(--secondary-color);
+        }
+
+        main {
+            padding-top: 80px; /* Adjust based on navbar height */
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo-container">
-            <a href="dashPrincipal.php">
-                <img src="image/tahfiz.jpg" alt="Logo">
-            </a>
-        </div>
+        <div class="navbar-content">
+            <div class="logo-container">
+                <a href="dashInstructor.php">MAAHAD TAHFIZ AS SYIFA</a>
+            </div>
         <div class="navbar-links">
             <a href="principalProfile.php">PROFILE</a>
             <a href="principalStudList.php">STUDENT</a>
             <a href="principalReport.php">REPORT</a>
             <a href="logout.php">LOGOUT</a>
         </div>
+        </div>
     </nav>
+    
 </body>
 </html>
