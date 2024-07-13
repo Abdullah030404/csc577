@@ -1,40 +1,39 @@
 <?php
 include 'db_connection.php';
-include_once "principalHeader.php";
+include_once "clerkHeader.php";
 
-function displayClassInformation() {
+// Function to display Staff Information Report
+function displayStaffInformation() {
     global $conn;
-    $sql = "SELECT c.classID, c.className, c.classCount, 
-                   (SELECT COUNT(*) FROM student st WHERE st.classID = c.classID) AS totalStudents, 
-                   s.staffName 
-            FROM class c 
-            LEFT JOIN staff s ON c.staffID = s.staffID";
+    $sql = "SELECT * FROM staff";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         echo "<table>
                 <thead>
                     <tr>
-                        <th>Class ID</th>
-                        <th>Class Name</th>
-                        <th>Max Capacity</th>
-                        <th>Total Students</th>
-                        <th>Assigned Instructor</th>
+                        <th>Staff ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Qualification</th>
+                        <th>Role</th>
                     </tr>
                 </thead>
                 <tbody>";
         while ($row = $result->fetch_assoc()) {
             echo "<tr>
-                    <td>" . htmlspecialchars($row["classID"]) . "</td>
-                    <td>" . htmlspecialchars($row["className"]) . "</td>
-                    <td>" . htmlspecialchars($row["classCount"]) . "</td>
-                    <td>" . htmlspecialchars($row["totalStudents"]) . "</td>
-                    <td>" . htmlspecialchars($row["staffName"] ?? 'Not Assigned') . "</td>
+                    <td>" . htmlspecialchars($row["staffID"]) . "</td>
+                    <td>" . htmlspecialchars($row["staffName"]) . "</td>
+                    <td>" . htmlspecialchars($row["staffEmail"]) . "</td>
+                    <td>" . htmlspecialchars($row["staffContact"]) . "</td>
+                    <td>" . htmlspecialchars($row["qualification"]) . "</td>
+                    <td>" . htmlspecialchars($row["staffRole"]) . "</td>
                 </tr>";
         }
         echo "</tbody></table>";
     } else {
-        echo "<p>No classes found.</p>";
+        echo "<p>No staff found.</p>";
     }
 }
 ?>
@@ -43,7 +42,7 @@ function displayClassInformation() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Information Report</title>
+    <title>Staff Information Report</title>
     <style>
         :root {
             --primary-color: #2b4560;
@@ -79,7 +78,7 @@ function displayClassInformation() {
             font-size: 1.5em;
             letter-spacing: 2px;
             text-transform: uppercase;
-            position: relative; /* Ensure position relative for absolute print button */
+            position: relative;
         }
 
         .report-header .print-btn {
@@ -236,11 +235,11 @@ function displayClassInformation() {
 <body>
     <div class="report-container">
         <div class="report-header no-print">
-            <h1>Class Information Report</h1>
-            <button class="print-btn" onclick="handlePrint('Class Information')">Print</button>
+            <h1>Staff Information Report</h1>
+            <button class="print-btn" onclick="handlePrint('Staff Information')">Print</button>
         </div>
         <div class="report-content">
-            <?php displayClassInformation(); ?>
+            <?php displayStaffInformation(); ?>
         </div>
     </div>
 </body>

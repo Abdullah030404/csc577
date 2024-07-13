@@ -1,41 +1,47 @@
 <?php
 include 'db_connection.php';
-include_once "principalHeader.php";
+include_once "clerkHeader.php";
 
-// Function to display Total Students per Class Report
-function displayTotalStudentsPerClass() {
+// Function to display Student Information Report sorted by classID
+function displayStudentInformation() {
     global $conn;
-    $sql = "SELECT c.classID, c.className, COUNT(s.studentIC) AS totalStudents, st.staffName
-            FROM class c 
-            LEFT JOIN student s ON c.classID = s.classID 
-            LEFT JOIN staff st ON c.staffID = st.staffID
-            GROUP BY c.classID, c.className, st.staffName
-            ORDER BY c.classID";
-
+    $sql = "SELECT s.*, c.className 
+            FROM student s
+            LEFT JOIN class c ON s.classID = c.classID
+            ORDER BY s.classID"; // Adding ORDER BY clause to sort by classID
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
+        
         echo "<table>
                 <thead>
                     <tr>
-                        <th>Class ID</th>
-                        <th>Class Name</th>
-                        <th>Total Students</th>
-                        <th>Assigned Staff</th>
+                        <th>Student IC</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Guardian Name</th>
+                        <th>Guardian Contact</th>
+                        <th>Class</th>
                     </tr>
                 </thead>
                 <tbody>";
         while ($row = $result->fetch_assoc()) {
             echo "<tr>
-                    <td>" . htmlspecialchars($row["classID"]) . "</td>
-                    <td>" . htmlspecialchars($row["className"]) . "</td>
-                    <td>" . htmlspecialchars($row["totalStudents"]) . "</td>
-                    <td>" . htmlspecialchars($row["staffName"] ?? 'Not Assigned') . "</td>
+                    <td>" . htmlspecialchars($row["studentIC"]) . "</td>
+                    <td>" . htmlspecialchars($row["studentName"]) . "</td>
+                    <td>" . htmlspecialchars($row["studentAge"]) . "</td>
+                    <td>" . htmlspecialchars($row["studentEmail"]) . "</td>
+                    <td>" . htmlspecialchars($row["studentAddress"]) . "</td>
+                    <td>" . htmlspecialchars($row["guardianName"]) . "</td>
+                    <td>" . htmlspecialchars($row["guardianContact"]) . "</td>
+                    <td>" . htmlspecialchars($row["className"] ?? 'Not Assigned') . "</td>
                 </tr>";
         }
         echo "</tbody></table>";
     } else {
-        echo "<p>No data available.</p>";
+        echo "<p>No students found.</p>";
     }
 }
 ?>
@@ -44,7 +50,7 @@ function displayTotalStudentsPerClass() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Total Students per Class Report</title>
+    <title>Student Information Report</title>
     <style>
         :root {
             --primary-color: #2b4560;
@@ -159,88 +165,110 @@ function displayTotalStudentsPerClass() {
         /* Print Styles */
         @media print {
             body {
-                background-color: #fff; /* Set background color for print */
+                background-color: #fff;
+                color: #000;
+                font-size: 12pt;
             }
 
             .report-container {
-                margin: 0 auto; /* Center the report on print */
-                box-shadow: none; /* Remove box-shadow for print */
-                border-radius: 0; /* Remove border radius for print */
-                border: none; /* Remove border for print */
-                max-width: 100%; /* Ensure report spans full width on print */
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                box-shadow: none;
+                border: none;
             }
 
-            .report-header {
-                background-color: transparent; /* Transparent header background for print */
-                color: var(--text-color); /* Text color for print */
-                text-align: left; /* Align header text to left for print */
-                padding: 0; /* No padding for print */
-                font-size: 1.2em; /* Adjust font size for print */
+            .report-header, .print-btn, .no-print {
+                display: none;
             }
 
-            .report-header .print-btn {
-                display: none; /* Hide print button for print */
+            .report-content {
+                padding: 0;
             }
 
             .print-header {
-                display: block; /* Display custom print header */
-                text-align: center; /* Center-align for print */
-                font-size: 1.5em; /* Adjust font size */
-                margin-bottom: 1rem; /* Add some space below the header */
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #000;
+                padding-bottom: 10px;
             }
 
-            .print-header h2, .print-header h3 {
-                margin: 0; /* Remove margins */
+            .print-header h2 {
+                font-size: 24pt;
+                margin: 0;
+                color: #2b4560;
+            }
+
+            .print-header h3 {
+                font-size: 16pt;
+                margin: 5px 0 0 0;
+                font-weight: normal;
+            }
+
+            .print-header .school-info {
+                font-size: 10pt;
+                margin-top: 5px;
             }
 
             table {
-                box-shadow: none; /* Remove box-shadow for print */
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
             }
 
             th, td {
-                border: 1px solid #000; /* Add border for table cells in print */
-                padding: 0.5rem; /* Adjust padding for print */
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: left;
             }
 
-            /* Hide elements for print */
-            .no-print {
-                display: none !important;
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+                color: black;
             }
-        }
 
-        /* Hide navigation bar for print */
-        @media print {
-            .navbar, .no-print {
-                display: none !important;
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
             }
+
+           
         }
     </style>
     <script>
         function setPrintHeader(reportType) {
             const printHeader = document.createElement('div');
             printHeader.className = 'print-header';
+            const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             printHeader.innerHTML = `
                 <h2>MAAHAD TAHFIZ AS SYIFA</h2>
                 <h3>${reportType} Report</h3>
+                <div class="report-date">Generated on: ${currentDate}</div>
             `;
             document.body.insertBefore(printHeader, document.querySelector('.report-container'));
+
+            const footer = document.createElement('div');
+            footer.className = 'footer';
+            document.body.appendChild(footer);
         }
 
         function handlePrint(reportType) {
             setPrintHeader(reportType);
             window.print();
-            document.querySelector('.print-header').remove(); // Remove the print header after printing
+            document.querySelector('.print-header').remove();
+            document.querySelector('.footer').remove();
         }
     </script>
 </head>
 <body>
     <div class="report-container">
         <div class="report-header no-print">
-            <h1>Total Students per Class Report</h1>
-            <button class="print-btn" onclick="handlePrint('Total Students per Class')">Print</button>
+            <h1>Student Information Report</h1>
+            <button class="print-btn" onclick="handlePrint('Student Information')">Print</button>
         </div>
         <div class="report-content">
-            <?php displayTotalStudentsPerClass(); ?>
+            <?php displayStudentInformation(); ?>
         </div>
     </div>
 </body>

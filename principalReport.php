@@ -2,9 +2,9 @@
 include_once "principalHeader.php";
 
 // Close prepared statement and database connection
-
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,66 +12,120 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Principal Reports</title>
     <style>
+        :root {
+            --primary-color: #2b4560;
+            --secondary-color: #ffffff;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --border-radius: 12px;
+            --background-color: #f0f4f8;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
+            background-color: var(--background-color);
             margin: 0;
             padding: 0;
+            line-height: 1.6;
         }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+
+        .reports-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
         }
-        .card {
-            background-color: #2b4560;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin: 15px;
-            padding: 20px;
-            width: 250px;
+
+        .reports-header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 2rem;
             text-align: center;
-            color: white;
-        }
-        .card h2 {
-            margin-bottom: 20px;
-            font-size: 20px;
-        }
-        .card button {
-            background-color: #738ca7;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            padding: 10px 20px;
+            font-size: 1.5em;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            transition: background-color 0.3s;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
         }
-        .card button:hover {
-            background-color: #45a049;
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .report-card {
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .report-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5em;
+        }
+
+        .report-card p {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #ff4757;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h2>Class Information</h2>
-            <button onclick="location.href='reportClassInformation.php'">View Report</button>
+    <div class="reports-container">
+        <div class="reports-header">
+            <h2>Principal Reports</h2>
         </div>
-        <div class="card">
-            <h2>Staff Information</h2>
-            <button onclick="location.href='reportStaffInformation.php'">View Report</button>
-        </div>
-        <div class="card">
-            <h2>Student Information</h2>
-            <button onclick="location.href='reportStudentInformation.php'">View Report</button>
-        </div>
-        <div class="card">
-            <h2>Total Students per Class</h2>
-            <button onclick="location.href='reportTotalStudentsPerClass.php'">View Report</button>
+        <div class="reports-grid">
+            <div class="report-card">
+                <h2>Class Information</h2>
+                <p>View detailed information about all classes, including class sizes, and instructor assigned.</p>
+                <a href="reportClassInformation.php" class="btn btn-primary">View Report</a>
+            </div>
+            <div class="report-card">
+                <h2>Staff Information</h2>
+                <p>Access comprehensive staff profiles, including qualifications, and responsibilities, </p>
+                <a href="reportStaffInformation.php" class="btn btn-primary">View Report</a>
+            </div>
+            <div class="report-card">
+                <h2>Student Information</h2>
+                <p>Review student data, including personal information,guardian contact and class joined.</p>
+                <a href="reportStudentInformation.php" class="btn btn-primary">View Report</a>
+            </div>
         </div>
     </div>
 </body>

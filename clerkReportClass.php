@@ -1,6 +1,6 @@
 <?php
 include 'db_connection.php';
-include_once "principalHeader.php";
+include_once "clerkHeader.php";
 
 function displayClassInformation() {
     global $conn;
