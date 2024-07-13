@@ -1,16 +1,5 @@
 <?php
-// Start the session
-session_start();
-
-// Check if the user is logged in and is a clerk
-if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Clerk') {
-    // Redirect to login page if not logged in or if role is incorrect
-    header("Location: login.php");
-    exit;
-}
-
-// Include database connection file
-require_once "db_connection.php";
+include_once "clerkHeader.php";
 
 // Initialize variables
 $studentIC = "";
@@ -89,7 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close the database connection
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,82 +85,110 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Student</title>
     <style>
+        :root {
+            --primary-color: #2b4560;
+            --secondary-color: #ffffff;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --border-radius: 12px;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #e1e7e0;
         }
-        .navbar {
-            background-color: #2b4560;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            padding: 0 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        .update-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            margin-left: 15px;
-        }
-        .logo-container img {
-            height: 50px;
-            margin-right: 10px;
-        }
-        .navbar-links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 10px;
-            transition: background-color 0.3s ease;
-            font-family: Verdana, sans-serif;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .navbar-links a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        .main-content {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 10px;
+
+        .update-header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 2rem;
             text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 80%;
-            margin: auto;
-            margin-top: 80px; /* Adjust to account for navbar height */
+            font-size: 1.5em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+
+        .update-content {
+            padding: 2rem;
         }
-        label {
-            margin: 10px 0 5px 0;
-            font-weight: bold;
+
+        .form-group {
+            margin-bottom: 1.5rem;
         }
-        input[type="text"],
-        input[type="number"],
-        input[type="email"] {
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .form-control {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            font-size: 1em;
+            color: var(--text-color);
+            transition: all 0.3s ease;
         }
-        input[type="submit"] {
-            background-color: #2b4560;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1em;
             cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
-        input[type="submit"]:hover {
-            background-color: #1e2e3b;
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #ff4757;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .update-container {
+                margin: 1rem;
+            }
         }
     </style>
     <script>
@@ -238,47 +254,57 @@ $conn->close();
     </script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo-container">
-            <a href="dashClerk.php">
-                <img src="image/tahfiz.jpg" alt="Logo">
-            </a>
+    <div class="update-container">
+        <div class="update-header">
+            <h2>Update Student</h2>
         </div>
-        <div class="navbar-links">
-            <a href="dashClerk.php">HOME</a>
-            <a href="logout.php">LOGOUT</a>
+        <div class="update-content">
+            <form method="post" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="studentPass">Student Password:</label>
+                    <input type="text" id="studentPass" name="studentPass" class="form-control" value="<?php echo htmlspecialchars($studentPass); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentName">Student Name:</label>
+                    <input type="text" id="studentName" name="studentName" class="form-control" value="<?php echo htmlspecialchars($studentName); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentAge">Student Age:</label>
+                    <input type="number" id="studentAge" name="studentAge" class="form-control" value="<?php echo htmlspecialchars($studentAge); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentEmail">Student Email:</label>
+                    <input type="email" id="studentEmail" name="studentEmail" class="form-control" value="<?php echo htmlspecialchars($studentEmail); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentAddress">Student Address:</label>
+                    <input type="text" id="studentAddress" name="studentAddress" class="form-control" value="<?php echo htmlspecialchars($studentAddress); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardianName">Guardian Name:</label>
+                    <input type="text" id="guardianName" name="guardianName" class="form-control" value="<?php echo htmlspecialchars($guardianName); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardianContact">Guardian Contact:</label>
+                    <input type="text" id="guardianContact" name="guardianContact" class="form-control" value="<?php echo htmlspecialchars($guardianContact); ?>" oninput="formatGuardianContact(this)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="classID">Class ID:</label>
+                    <input type="text" id="classID" name="classID" class="form-control" value="<?php echo htmlspecialchars($classID); ?>" required>
+                </div>
+
+                <div class="btn-container">
+                    <input type="submit" value="Update" class="btn btn-primary">
+                </div>
+            </form>
         </div>
-    </nav>
-    <div class="main-content">
-        <h2>Update Student</h2>
-        <form method="post" onsubmit="return validateForm()">
-            <label for="studentPass">Student Password:</label>
-            <input type="text" id="studentPass" name="studentPass" value="<?php echo htmlspecialchars($studentPass); ?>" required>
-
-            <label for="studentName">Student Name:</label>
-            <input type="text" id="studentName" name="studentName" value="<?php echo htmlspecialchars($studentName); ?>" required>
-
-            <label for="studentAge">Student Age:</label>
-            <input type="number" id="studentAge" name="studentAge" value="<?php echo htmlspecialchars($studentAge); ?>" required>
-
-            <label for="studentEmail">Student Email:</label>
-            <input type="email" id="studentEmail" name="studentEmail" value="<?php echo htmlspecialchars($studentEmail); ?>" required>
-
-            <label for="studentAddress">Student Address:</label>
-            <input type="text" id="studentAddress" name="studentAddress" value="<?php echo htmlspecialchars($studentAddress); ?>" required>
-
-            <label for="guardianName">Guardian Name:</label>
-            <input type="text" id="guardianName" name="guardianName" value="<?php echo htmlspecialchars($guardianName); ?>" required>
-
-            <label for="guardianContact">Guardian Contact:</label>
-            <input type="text" id="guardianContact" name="guardianContact" value="<?php echo htmlspecialchars($guardianContact); ?>" oninput="formatGuardianContact(this)" required>
-
-
-            <label for="classID">Class ID:</label>
-            <input type="text" id="classID" name="classID" value="<?php echo htmlspecialchars($classID); ?>" required>
-
-            <input type="submit" value="Update">
-        </form>
     </div>
 </body>
 </html>

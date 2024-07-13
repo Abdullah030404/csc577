@@ -1,10 +1,13 @@
 <?php
 include_once "clerkHeader.php"; 
+require_once "db_connection.php"; // Ensure database connection is included
 
-// Fetch all student data from the database
+// Fetch all student data along with class names from the database
 $query = "
-    SELECT studentIC, studentPass, studentName, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID
-    FROM student
+    SELECT s.studentIC, s.studentPass, s.studentName, s.studentAge, s.studentEmail, s.studentAddress, s.guardianName, s.guardianContact, c.className
+    FROM student s
+    JOIN class c ON s.classID = c.classID
+    ORDER BY c.classID
 ";
 $result = $conn->query($query);
 
@@ -25,82 +28,128 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student List</title>
     <style>
+        :root {
+            --primary-color: #2b4560;
+            --secondary-color: #ffffff;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --border-radius: 12px;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e1e7e0;
+            background-color: #f0f4f8;
         }
         
         .main-content {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 1000px;
-            width: 80%;
-            margin: auto;
-            margin-top: 80px; /* Adjust to account for navbar height */
+            background-color: var(--secondary-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 1300px;
+            width: 90%;
+            margin: 2rem auto;
         }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 3rem;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin-top: 1rem;
         }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
+
         th, td {
-            padding: 10px;
+            padding: 1rem;
             text-align: left;
+            border-bottom: 1px solid #e0e0e0;
         }
+
         th {
-            background-color: #2b4560;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            font-weight: 600;
         }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
         .action-link {
-            color: #2b4560;
+            color: var(--accent-color);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
+
         .action-link:hover {
-            text-decoration: underline;
+            color: #ff4757;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    
     <div class="main-content">
-        <h2>Student List</h2>
-        <table>
-            <tr>
-                <th>Student IC</th>
-                <th>Student Pass</th>
-                <th>Student Name</th>
-                <th>Student Age</th>
-                <th>Student Email</th>
-                <th>Student Address</th>
-                <th>Guardian Name</th>
-                <th>Guardian Contact</th>
-                <th>Class ID</th>
-                <th>Action</th>
-            </tr>
-            <?php foreach ($students as $student): ?>
+        <h1>Student List</h1>
+        <div style="overflow-x: auto;">
+            <table>
                 <tr>
-                    <td><?php echo htmlspecialchars($student['studentIC']); ?></td>
-                    <td><?php echo htmlspecialchars($student['studentPass']); ?></td>
-                    <td><?php echo htmlspecialchars($student['studentName']); ?></td>
-                    <td><?php echo htmlspecialchars($student['studentAge']); ?></td>
-                    <td><?php echo htmlspecialchars($student['studentEmail']); ?></td>
-                    <td><?php echo htmlspecialchars($student['studentAddress']); ?></td>
-                    <td><?php echo htmlspecialchars($student['guardianName']); ?></td>
-                    <td><?php echo htmlspecialchars($student['guardianContact']); ?></td>
-                    <td><?php echo htmlspecialchars($student['classID']); ?></td>
-                    <td><a class="action-link" href="clerkUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a></td>
+                    <th>Student IC</th>
+                    <th>Student Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Guardian Name</th>
+                    <th>Guardian Contact</th>
+                    <th>Class Name</th>
+                    <th>Action</th>
                 </tr>
-            <?php endforeach; ?>
-        </table>
+                <?php foreach ($students as $student): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($student['studentIC']); ?></td>
+                        <td><?php echo htmlspecialchars($student['studentName']); ?></td>
+                        <td><?php echo htmlspecialchars($student['studentAge']); ?></td>
+                        <td><?php echo htmlspecialchars($student['studentEmail']); ?></td>
+                        <td><?php echo htmlspecialchars($student['studentAddress']); ?></td>
+                        <td><?php echo htmlspecialchars($student['guardianName']); ?></td>
+                        <td><?php echo htmlspecialchars($student['guardianContact']); ?></td>
+                        <td><?php echo htmlspecialchars($student['className']); ?></td>
+                        <td><a class="action-link" href="clerkUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
     </div>
 </body>
 </html>

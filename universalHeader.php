@@ -35,6 +35,8 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             left: 0;
             right: 0;
             z-index: 1000;
+            justify-content: space-between;
+
         }
 
         .navbar-content {
@@ -42,7 +44,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             justify-content: space-between;
             align-items: center;
             padding: 1rem 5%;
-            max-width: 1200px;
+            max-width: 2000px;
             margin: 0 auto;
         }
 
@@ -63,7 +65,9 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         .logo-container a:hover {
             color: #f0f0f0;
         }
-
+        .gap {
+            padding: 9rem;
+        }
         .navbar-links {
             display: flex;
             gap: 1rem;
@@ -95,6 +99,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             <div class="logo-container">
                 <a href="universalHomepage.php">MAAHAD TAHFIZ AS SYIFA</a>
             </div>
+            <div class="gap">
             <div class="navbar-links">
             <a href="universalContactUs.php">CONTACT US</a>
             <a href="universalAboutUs.php">ABOUT US</a>
