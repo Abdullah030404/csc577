@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare the SQL statement
-    $sql = "SELECT {$columnID}, {$passwordColumnName}, {$roleColumnName} FROM {$tableName} WHERE {$columnID} = ?";
+    $sql = "SELECT {$columnID}, {$passwordColumnName}" . ($role !== 'Student' ? ", {$roleColumnName}" : "") . " FROM {$tableName} WHERE {$columnID} = ?";
 
     if ($stmt = $conn->prepare($sql)) {
         // Bind the variables to the prepared statement as parameters
@@ -68,13 +68,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if the user exists
         if ($stmt->num_rows == 1) {
             // Bind result variables
-            $stmt->bind_result($db_userID, $db_password, $db_role);
+            if ($role === 'Student') {
+                $stmt->bind_result($db_userID, $db_password);
+            } else {
+                $stmt->bind_result($db_userID, $db_password, $db_role);
+            }
             $stmt->fetch();
 
             // Verify the password
             if ($password === $db_password) { // Compare plain text passwords
-                // Check if the role matches
-                if ($role === $db_role) {
+                // Check if the role matches for staff
+                if ($role === 'Student' || $role === $db_role) {
                     // Password and role are correct, redirect to appropriate dashboard
                     $_SESSION['userID'] = $db_userID; // Store user ID in session for further use
                     $_SESSION['role'] = $role; // Store role in session for further use
