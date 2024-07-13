@@ -6,7 +6,6 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
     <style>
         :root {
             --primary-color: #2b4560;
@@ -35,8 +34,6 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             left: 0;
             right: 0;
             z-index: 1000;
-            justify-content: space-between;
-
         }
 
         .navbar-content {
@@ -44,7 +41,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             justify-content: space-between;
             align-items: center;
             padding: 1rem 5%;
-            max-width: 2000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -65,12 +62,10 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         .logo-container a:hover {
             color: #f0f0f0;
         }
-        .gap {
-            padding: 9rem;
-        }
+
         .navbar-links {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .navbar-links a {
@@ -99,16 +94,18 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             <div class="logo-container">
                 <a href="universalHomepage.php">MAAHAD TAHFIZ AS SYIFA</a>
             </div>
-            <div class="gap">
-            <div class="navbar-links">
+        <div class="navbar-links">
             <a href="universalContactUs.php">CONTACT US</a>
             <a href="universalAboutUs.php">ABOUT US</a>
             <a href="login.php">LOGIN</a>
             <a href="register.php">REGISTER</a>
-            
         </div>
         </div>
     </nav>
     
 </body>
 </html>
+
+
+
+

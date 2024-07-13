@@ -1,12 +1,12 @@
 <?php
 // Include the database connection file
 include 'db_connection.php';
+include_once "universalHeader.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the form data
     $studentIC = $_POST['studentIC'];
     $studentName = $_POST['studentName'];
-    $studentPass = $_POST['studentPass'];
     $studentAge = $_POST['studentAge'];
     $studentEmail = $_POST['studentEmail'];
     $studentAddress = $_POST['studentAddress'];
@@ -14,35 +14,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $guardianContact = $_POST['guardianContact'];
     $classID = $_POST['classID'];
 
-    // Check if the studentIC and studentName exist in registered_students
-    $checkQuery = "SELECT * FROM registered_students WHERE studentIC = ? AND studentName = ?";
-    if ($checkStmt = $conn->prepare($checkQuery)) {
-        $checkStmt->bind_param("ss", $studentIC, $studentName);
-        $checkStmt->execute();
-        $result = $checkStmt->get_result();
-
-        if ($result->num_rows > 0) {
-            // If studentIC and studentName match, proceed with registration
-            $sql = "INSERT INTO student (studentIC, studentName, studentPass, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            
-            if ($stmt = $conn->prepare($sql)) {
-                $stmt->bind_param("sssissssi", $studentIC, $studentName, $studentPass, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $classID);
-                
-                if ($stmt->execute()) {
-                    echo "Record inserted successfully.";
-                } else {
-                    echo "ERROR: Could not execute query: $sql. " . $conn->error;
-                }
-            } else {
-                echo "ERROR: Could not prepare query: $sql. " . $conn->error;
-            }
+    // Prepare the SQL statement
+    $sql = "INSERT INTO student (studentIC, studentName, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    // Prepare the statement
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind the variables to the prepared statement as parameters
+        $stmt->bind_param("ssissssi", $studentIC, $studentName, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $classID);
+        
+        // Attempt to execute the prepared statement
+        if ($stmt->execute()) {
+            echo "Record inserted successfully.";
         } else {
-            echo "ERROR: Student IC and Name do not match records. Please check your details.";
+            echo "ERROR: Could not execute query: $sql. " . $conn->error;
         }
-
-        $checkStmt->close();
     } else {
-        echo "ERROR: Could not prepare query: $checkQuery. " . $conn->error;
+        echo "ERROR: Could not prepare query: $sql. " . $conn->error;
     }
 
     // Close the statement and connection
@@ -50,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,53 +45,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Student Registration Form</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #ece0d1;
-        }
-        .navbar {
-            width: 100%;
-            background-color: #2b4560;
-            padding: 10px 20px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-        .logo-container img {
-            height: 40px;
-            margin-right: 10px;
-        }
-        .navbar-links {
-            display: flex;
-        }
-        .navbar-links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 10px;
-            transition: background-color 0.3s ease;
-            font-family: Verdana, sans-serif;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .navbar-links a:hover {
-            background-color: #ddd;
-            color: black;
         }
         .container {
-            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 80px;
+            height: 100vh;
+            margin-top: 60px;
         }
         .form-container {
             position: relative;
@@ -133,8 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .form-container input[type="text"],
         .form-container input[type="number"],
-        .form-container input[type="email"],
-        .form-container input[type="password"] {
+        .form-container input[type="email"] {
             width: 90%;
             padding: 10px;
             margin-bottom: 10px;
@@ -171,35 +121,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-
-<nav class="navbar">
-    <div class="logo-container">
-        <a href="index.html">
-            <img src="image/tahfiz.jpg" alt="Logo">
-        </a>
-    </div>
-    <div class="navbar-links">
-        <a href="login.php">LOGIN</a>
-        <a href="register.php">REGISTER</a>
-    </div>
-</nav>
-
 <div class="container">
     <div class="form-container">
         <h2>Student Registration</h2>
-        <form action="register.php" method="post">
+        <form action="register_student.php" method="post">
             <label for="studentIC">Student IC</label>
             <input type="text" id="studentIC" name="studentIC" maxlength="14" required>
             <label for="studentName">Student Name</label>
             <input type="text" id="studentName" name="studentName" maxlength="30" required>
-            <label for="studentPass">Student Password</label>
-            <input type="password" id="studentPass" name="studentPass" maxlength="30" required>
             <label for="studentAge">Student Age</label>
             <input type="number" id="studentAge" name="studentAge" required>
             <label for="studentEmail">Student Email</label>
             <input type="email" id="studentEmail" name="studentEmail" maxlength="30" required>
             <label for="studentAddress">Student Address</label>
-            <input type="text" id="studentAddress" name="studentAddress" maxlength="100" required>
+            <input type="text" id="studentAddress" name="studentAddress" maxlength="30" required>
             <label for="guardianName">Guardian Name</label>
             <input type="text" id="guardianName" name="guardianName" maxlength="30" required>
             <label for="guardianContact">Guardian Contact</label>

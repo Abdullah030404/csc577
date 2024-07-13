@@ -102,40 +102,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #e1e7e0;
-        }
-        .navbar {
-            background-color: #2b4560;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            padding: 0 20px;
-        }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            margin-left: 15px;
-        }
-        .logo-container img {
-            height: 50px;
-            margin-right: 10px;
-        }
-        .navbar-links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 10px;
-            transition: background-color 0.3s ease;
-            font-family: Verdana, sans-serif;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .navbar-links a:hover {
-            background-color: #ddd;
-            color: black;
         }
         .container {
             display: flex;
