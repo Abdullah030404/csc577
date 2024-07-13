@@ -131,6 +131,9 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             <img src="image/homePage1.jpg" alt="Image 1" class="active">
             <img src="image/homePage2.jpg" alt="Image 2">
             <img src="image/homePage3.jpg" alt="Image 3">
+            <img src="image/homePage4.jpg" alt="Image 4">
+            <img src="image/homePage5.jpg" alt="Image 5">
+            <img src="image/homePage6.jpg" alt="Image 6">
             <!-- Add more images as needed -->
         </div>
     </main>
