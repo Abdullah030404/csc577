@@ -84,7 +84,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         }
 
         main {
-            padding-top: 80px; /* Adjust based on navbar height */
+            padding-top: 10px; /* Adjust based on navbar height */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -93,20 +93,23 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
 
         .carousel {
             position: relative;
-            width: 80%;
-            max-width: 600px;
+            width: 100%; /* Change width to 100% */
+            height: 100vh; /* Full viewport height */
             overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .carousel img {
             width: 100%;
-            display: none;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0; /* Initial opacity to create fade-in effect */
+            transition: opacity 1s ease; /* Smooth opacity transition */
         }
 
         .carousel img.active {
-            display: block;
+            opacity: 1; /* Show active image */
         }
 
     </style>
@@ -144,12 +147,33 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         const totalImages = images.length;
 
         function showNextImage() {
-            images[currentIndex].classList.remove('active');
-            currentIndex = (currentIndex + 1) % totalImages;
-            images[currentIndex].classList.add('active');
+            const currentImage = images[currentIndex];
+            const nextIndex = (currentIndex + 1) % totalImages;
+            const nextImage = images[nextIndex];
+
+            // Fade out current image
+            currentImage.style.opacity = 0;
+
+            // Set timeout to change image after fade out
+            setTimeout(() => {
+                // Change active class
+                currentImage.classList.remove('active');
+                nextImage.classList.add('active');
+
+                // Fade in next image
+                nextImage.style.opacity = 1;
+
+                // Update currentIndex
+                currentIndex = nextIndex;
+            }, 1000); // Adjust timing to match CSS transition duration (1s)
         }
 
-        setInterval(showNextImage, 3000); // Change image every 3 seconds
+        // Show the first image immediately
+        images[currentIndex].classList.add('active');
+
+        // Start the interval to change images
+        setInterval(showNextImage, 5000); // Change image every 5 seconds
+
     </script>
 </body>
 </html>
