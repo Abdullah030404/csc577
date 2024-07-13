@@ -145,7 +145,10 @@ $conn->close();
                         <td><?php echo htmlspecialchars($student['guardianName']); ?></td>
                         <td><?php echo htmlspecialchars($student['guardianContact']); ?></td>
                         <td><?php echo htmlspecialchars($student['className']); ?></td>
-                        <td><a class="action-link" href="clerkUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a></td>
+                        <td>
+                            <a class="action-link" href="clerkUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a>  
+                            <a class="action-link" href="clerkDeleteStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>" onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </table>

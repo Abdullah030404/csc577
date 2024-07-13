@@ -1,20 +1,21 @@
 <?php
-require_once "db_connection.php"; // Uncomment if you need to include database connection
+include_once "universalHeader.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Maahad Tahfiz As Syifa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         :root {
-            --primary-color: #2b4560;
+            --primary-color: #1a3a63;
             --secondary-color: #ffffff;
-            --hover-color: #3a5f81;
-            --background-color: #f0f4f8;
+            --accent-color: #ffd700;
             --text-color: #333;
-            --container-background: #ffffff;
-            --container-border: #ddd;
+            --background-color: #f0f4f8;
         }
 
         * {
@@ -24,151 +25,127 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--background-color);
             line-height: 1.6;
-        }
-
-        .navbar {
-            background-color: var(--primary-color);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: static;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-
-        .navbar-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-container a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            transition: color 0.3s ease;
-        }
-
-        .logo-container a:hover {
-            color: #f0f0f0;
-        }
-
-        .navbar-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .navbar-links a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .navbar-links a:hover {
-            background-color: var(--hover-color);
-            color: var(--secondary-color);
-        }
-
-        main {
-            padding-top: 20px; /* Adjust based on navbar height */
-            padding-bottom: 40px;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .card {
-            background-color: var(--container-background);
-            border: 1px solid var(--container-border);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .card p {
             color: var(--text-color);
         }
 
-        .icon {
-            color: green;
-            font-size: 1.5rem;
-            margin-right: 10px;
+        main {
+            padding-top: 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
         }
 
         .header {
             text-align: center;
-            position: relative;
+            color: black;
+            margin-bottom: 3rem;
+            width: 300px;
         }
 
-        .header-content {
-            position: relative;
-            z-index: 2;
+        .header.card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 600px;
+        }
+
+        .header.card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
         }
 
         .header h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
+        .header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding: 2rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            text-align: center;
+            width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card, .header {
+                width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-content">
-            <div class="logo-container">
-                <a href="universalHomepage.php">MAAHAD TAHFIZ AS SYIFA</a>
-            </div>
-            <div class="navbar-links">
-                <a href="universalContactUs.php">CONTACT US</a>
-                <a href="universalAboutUs.php">ABOUT US</a>
-                <a href="login.php">LOGIN</a>
-                <a href="register.php">REGISTER</a>
-            </div>
-        </div>
-    </nav>
-
     <main>
-        <div class="header">
-            <div class="header-content">
-                <h1>CONTACT US</h1>
-            </div>
+        <div class="header card">
+            <h1>Contact Us</h1>
+            <p>We're here to help and answer any question you might have. We look forward to hearing from you!</p>
         </div>
 
         <div class="container">
             <div class="card">
+                <i class="fas fa-map-marker-alt icon"></i>
                 <h2>Address</h2>
-                <p>Kampung Kolam, Kuala Ibai, 20400 </p>
+                <p>Kampung Kolam, Kuala Ibai, 20400</p>
             </div>
             <div class="card">
+                <i class="fas fa-phone-alt icon"></i>
                 <h2>Phone Number</h2>
                 <p>019-930 6844</p>
             </div>
             <div class="card">
+                <i class="fas fa-envelope icon"></i>
                 <h2>Email</h2>
                 <p>maahadassyifa@gmail.com</p>
             </div>

@@ -112,67 +112,106 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        body {
+       body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f4f8;
             line-height: 1.6;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
         }
+
         .container {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin-top: 60px;
+            margin-top: 30px;
         }
+
         .form-container {
-            border: none;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #2b4560;
-            width: 350px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            color: white;
-            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            width: 400px;
         }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
         .form-container h2 {
-            color: white;
-            margin-bottom: 20px;
-            font-size: 24px;
+            color: #2b4560;
+            margin-bottom: 30px;
+            font-size: 28px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
+
         .form-container label {
             display: block;
-            margin-bottom: 5px;
-            text-align: left;
-            color: white;
-            margin-left: 20px;
+            margin-bottom: 8px;
+            color: #2b4560;
+            font-weight: 600;
+            font-size: 14px;
         }
+
         .form-container select,
         .form-container input[type="text"],
         .form-container input[type="password"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 10px;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
             border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 8px;
             box-sizing: border-box;
             font-size: 16px;
+            transition: border-color 0.3s ease;
         }
+
+        .form-container select:focus,
+        .form-container input[type="text"]:focus,
+        .form-container input[type="password"]:focus {
+            outline: none;
+            border-color: #3a6186;
+            box-shadow: 0 0 0 2px rgba(58, 97, 134, 0.2);
+        }
+
+        .button-confirm {
+            text-align: center;
+        }
+
         .button-confirm button {
-            width: 50%;
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
             margin-top: 10px;
-            background-color: #738ca7;
+            background-color: #3a6186;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 18px;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
         }
+
         .button-confirm button:hover {
-            background-color: #45a049;
+            background-color: #89253e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-confirm button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>

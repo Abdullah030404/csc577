@@ -8,84 +8,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add/Update Instructor</title>
     <style>
-        .wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-        .page-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .section {
-            margin-bottom: 40px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table th,
-        table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        table th {
-            background-color: #f4f4f4;
-            font-weight: bold;
-        }
-        .table-striped tbody tr:nth-child(odd) {
-            background-color: #f9f9f9;
-        }
-        .table-striped tbody tr:nth-child(even) {
-            background-color: #fff;
-        }
-        .btn-container {
-            display: flex;
-            gap: 10px; /* Space between the buttons */
-            margin-top: 20px; /* Adjust as needed */
-            justify-content: center;
-        }
-        .btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            color: #fff;
-        }
-        .btn-primary {
-            background-color: #007bff;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        .error-message {
-            color: red;
-            font-size: 12px;
-            display: none;
-        }
-    </style>
+    :root {
+        --primary-color: #2b4560;
+        --secondary-color: #ffffff;
+        --accent-color: #ff6b6b;
+        --text-color: #333;
+        --border-radius: 12px;
+        --background-color: #f0f4f8;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--background-color);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    .wrapper {
+        max-width: 1200px;
+        margin: 2rem auto;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-header {
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        padding: 2rem;
+        text-align: center;
+        font-size: 1.5em;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+    }
+
+    .section {
+        margin-bottom: 2rem;
+    }
+
+    h2 {
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        background-color: var(--secondary-color);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+
+    table th,
+    table td {
+        padding: 1rem;
+        text-align: left;
+    }
+
+    table th {
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .table-striped tbody tr:nth-child(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-container {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 1em;
+        cursor: pointer;
+        border: none;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .btn-primary {
+        background-color: var(--accent-color);
+        color: var(--secondary-color);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn-primary:hover {
+        background-color: #ff4757;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        font-size: 1em;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--accent-color);
+    }
+
+    .error-message {
+        color: var(--accent-color);
+        font-size: 0.9em;
+        margin-top: 0.5rem;
+        display: none;
+    }
+
+    .lead {
+        font-size: 1.1em;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+</style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const namePattern = /^[A-Za-z\s@]+$/;
