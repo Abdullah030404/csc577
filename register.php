@@ -6,6 +6,7 @@ include_once "universalHeader.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the form data
     $studentIC = $_POST['studentIC'];
+    $studentPass = $_POST['studentPass'];
     $studentName = $_POST['studentName'];
     $studentAge = $_POST['studentAge'];
     $studentEmail = $_POST['studentEmail'];
@@ -15,12 +16,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $classID = $_POST['classID'];
 
     // Prepare the SQL statement
-    $sql = "INSERT INTO student (studentIC, studentName, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO student (studentIC, studentPass, studentName, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     // Prepare the statement
     if ($stmt = $conn->prepare($sql)) {
         // Bind the variables to the prepared statement as parameters
-        $stmt->bind_param("ssissssi", $studentIC, $studentName, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $classID);
+        $stmt->bind_param("ssisssssi", $studentIC, $studentPass, $studentName, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $classID);
         
         // Attempt to execute the prepared statement
         if ($stmt->execute()) {
@@ -35,6 +36,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close the statement and connection
     $stmt->close();
     $conn->close();
+}
+
+// Fetch all classes from the database
+$classQuery = "SELECT classID, className FROM class";
+$classResult = $conn->query($classQuery);
+$classes = [];
+while ($classRow = $classResult->fetch_assoc()) {
+    $classes[] = $classRow;
 }
 ?>
 <!DOCTYPE html>
@@ -56,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin-top: 60px;
+            margin-top: 180px;
         }
         .form-container {
             position: relative;
@@ -84,7 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .form-container input[type="text"],
         .form-container input[type="number"],
-        .form-container input[type="email"] {
+        .form-container input[type="email"],
+        .form-container input[type="password"],
+        .form-container select {
             width: 90%;
             padding: 10px;
             margin-bottom: 10px;
@@ -127,6 +138,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="register_student.php" method="post">
             <label for="studentIC">Student IC</label>
             <input type="text" id="studentIC" name="studentIC" maxlength="14" required>
+            <label for="studentPass">Student Password</label>
+            <input type="password" id="studentPass" name="studentPass" required>
             <label for="studentName">Student Name</label>
             <input type="text" id="studentName" name="studentName" maxlength="30" required>
             <label for="studentAge">Student Age</label>
@@ -139,8 +152,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="text" id="guardianName" name="guardianName" maxlength="30" required>
             <label for="guardianContact">Guardian Contact</label>
             <input type="text" id="guardianContact" name="guardianContact" maxlength="10" required>
-            <label for="classID">Class ID</label>
-            <input type="text" id="classID" name="classID" maxlength="10" required>
+            <label for="classID">Class</label>
+            <select id="classID" name="classID" required>
+                <?php foreach ($classes as $class): ?>
+                    <option value="<?php echo htmlspecialchars($class['classID']); ?>">
+                        <?php echo htmlspecialchars($class['classID'] . '-' . $class['className']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
             <div class="button-register">
                 <button type="submit">REGISTER</button>
             </div>
