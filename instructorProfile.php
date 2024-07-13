@@ -8,6 +8,7 @@ $staffName = "";
 $staffEmail = "";
 $staffContact = "";
 $qualification = "";
+$staffPass = "";
 $errorMessages = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -49,18 +50,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
-    $instructor = $result->fetch_assoc();
-    $staffID = $instructor['staffID'];
-    $staffName = $instructor['staffName'];
-    $staffEmail = $instructor['staffEmail'];
-    $staffContact = $instructor['staffContact'];
-    $qualification = $instructor['qualification'];
-} else {
-    $errorMessages[] = "Instructor not found.";
+    if ($result->num_rows > 0) {
+        $instructor = $result->fetch_assoc();
+        $staffID = $instructor['staffID'];
+        $staffName = $instructor['staffName'];
+        $staffEmail = $instructor['staffEmail'];
+        $staffContact = $instructor['staffContact'];
+        $qualification = $instructor['qualification'];
+    } else {
+        $errorMessages[] = "Instructor not found.";
+    }
+    $stmt->close();
+    $conn->close();
 }
-$stmt->close();
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -177,7 +179,6 @@ $conn->close();
             }
         }
     </style>
-
 </head>
 
 <body>
