@@ -85,7 +85,30 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
 
         main {
             padding-top: 80px; /* Adjust based on navbar height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
+
+        .carousel {
+            position: relative;
+            width: 80%;
+            max-width: 600px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel img {
+            width: 100%;
+            display: none;
+        }
+
+        .carousel img.active {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -94,18 +117,36 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             <div class="logo-container">
                 <a href="universalHomepage.php">MAAHAD TAHFIZ AS SYIFA</a>
             </div>
-        <div class="navbar-links">
-            <a href="universalContactUs.php">CONTACT US</a>
-            <a href="universalAboutUs.php">ABOUT US</a>
-            <a href="login.php">LOGIN</a>
-            <a href="register.php">REGISTER</a>
-        </div>
+            <div class="navbar-links">
+                <a href="universalContactUs.php">CONTACT US</a>
+                <a href="universalAboutUs.php">ABOUT US</a>
+                <a href="login.php">LOGIN</a>
+                <a href="register.php">REGISTER</a>
+            </div>
         </div>
     </nav>
-    
+
+    <main>
+        <div class="carousel">
+            <img src="homePage1.jpg" alt="Image 1" class="active">
+            <img src="homePage2.jpg" alt="Image 2">
+            <img src="homePage3.jpg" alt="Image 3">
+            <!-- Add more images as needed -->
+        </div>
+    </main>
+
+    <script>
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.carousel img');
+        const totalImages = images.length;
+
+        function showNextImage() {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % totalImages;
+            images[currentIndex].classList.add('active');
+        }
+
+        setInterval(showNextImage, 3000); // Change image every 3 seconds
+    </script>
 </body>
 </html>
-
-
-
-
