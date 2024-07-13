@@ -128,9 +128,9 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
 
     <main>
         <div class="carousel">
-            <img src="homePage1.jpg" alt="Image 1" class="active">
-            <img src="homePage2.jpg" alt="Image 2">
-            <img src="homePage3.jpg" alt="Image 3">
+            <img src="image/homePage1.jpg" alt="Image 1" class="active">
+            <img src="image/homePage2.jpg" alt="Image 2">
+            <img src="image/homePage3.jpg" alt="Image 3">
             <!-- Add more images as needed -->
         </div>
     </main>
