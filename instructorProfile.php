@@ -1,5 +1,5 @@
 <?php
-include_once "instructorHeader.php"; 
+include_once "instructorHeader.php";
 require_once "db_connection.php";
 
 $instructorID = $_SESSION['userID'];
@@ -28,20 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessages[] = "Invalid email format.";
     }
 
-    if (!preg_match('/^\d{3}-\d{3} \d{4}$/', $staffContact)) {
-        $errorMessages[] = "Contact must be in the form '###-### ####'.";
-    }
-
     if (strlen($staffPass) < 6) {
         $errorMessages[] = "Password must be at least 6 characters long.";
-    } else {
-        $staffPass_hashed = hash('sha256', $staffPass);
     }
 
     if (empty($errorMessages)) {
         $query = "UPDATE staff SET staffName = ?, staffEmail = ?, staffContact = ?, qualification = ?, staffPass = ? WHERE staffID = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssssss", $staffName, $staffEmail, $staffContact, $qualification, $staffPass_hashed, $staffID);
+        $stmt->bind_param("ssssss", $staffName, $staffEmail, $staffContact, $qualification, $staffPass, $staffID);
 
         if ($stmt->execute()) {
             $updateSuccess = true;
@@ -76,6 +70,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -195,37 +190,9 @@ $conn->close();
             }
         }
     </style>
-    <script>
-        function validateForm() {
-            var namePattern = /^[A-Za-z@ ]+$/;
-            var staffName = document.getElementById("staffName").value;
-            var staffPass = document.getElementById("staffPass").value;
-            var staffContact = document.getElementById("staffContact").value;
-            var contactPattern = /^\d{3}-\d{3} \d{4}$/;
 
-            if (!namePattern.test(staffName)) {
-                alert("Name can only contain letters, spaces, or @.");
-                return false;
-            }
-
-            if (staffPass.length < 6) {
-                alert("Password must be at least 6 characters long.");
-                return false;
-            }
-
-            if (!contactPattern.test(staffContact)) {
-                alert("Contact must be in the form '###-### ####'.");
-                return false;
-            }
-
-            return true;
-        }
-
-        <?php if ($updateSuccess): ?>
-        alert("Data has been updated.");
-        <?php endif; ?>
-    </script>
 </head>
+
 <body>
     <div class="profile-container">
         <div class="profile-header">
@@ -242,37 +209,77 @@ $conn->close();
             <form method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="staffID">Staff ID:</label>
-                    <input type="text" id="staffID" name="staffID" value="<?php echo htmlspecialchars($staffID); ?>" readonly>
+                    <input type="text" id="staffID" name="staffID" value="<?php echo htmlspecialchars($staffID); ?>"
+                        readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="staffName">Name:</label>
-                    <input type="text" id="staffName" name="staffName" value="<?php echo htmlspecialchars($staffName); ?>" required>
+                    <input type="text" id="staffName" name="staffName"
+                        value="<?php echo htmlspecialchars($staffName); ?>" pattern="[A-Za-z\s]+"
+                        title="Only letters and spaces are allowed" required>
                 </div>
 
                 <div class="form-group">
                     <label for="staffEmail">Email:</label>
-                    <input type="email" id="staffEmail" name="staffEmail" value="<?php echo htmlspecialchars($staffEmail); ?>" required>
+                    <input type="email" id="staffEmail" name="staffEmail"
+                        value="<?php echo htmlspecialchars($staffEmail); ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="staffContact">Contact:</label>
-                    <input type="text" id="staffContact" name="staffContact" value="<?php echo htmlspecialchars($staffContact); ?>" required>
+                    <input type="text" id="staffContact" name="staffContact"
+                        value="<?php echo htmlspecialchars($staffContact); ?>" pattern="01\d-\d{7}"
+                        title="Format: 01#-#######" required>
                 </div>
 
                 <div class="form-group">
                     <label for="qualification">Qualification:</label>
-                    <input type="text" id="qualification" name="qualification" value="<?php echo htmlspecialchars($qualification); ?>" required>
+                    <input type="text" id="qualification" name="qualification"
+                        value="<?php echo htmlspecialchars($qualification); ?>" pattern="[A-Za-z\s]+"
+                        title="Only letters and spaces are allowed" required>
                 </div>
 
                 <div class="form-group">
                     <label for="staffPass">Password:</label>
-                    <input type="password" id="staffPass" name="staffPass" value="<?php echo htmlspecialchars($staffPass); ?>" required>
+                    <input type="password" id="staffPass" name="staffPass"
+                        value="<?php echo htmlspecialchars($staffPass); ?>" required>
                 </div>
 
                 <button type="submit" class="btn-submit">Update Profile</button>
             </form>
         </div>
+        <script>
+            function validateForm() {
+                var namePattern = /^[A-Za-z@ ]+$/;
+                var staffName = document.getElementById("staffName").value;
+                var staffPass = document.getElementById("staffPass").value;
+                var staffContact = document.getElementById("staffContact").value;
+                var contactPattern = /^01\d-\d{7}$/;
+
+                if (!namePattern.test(staffName)) {
+                    alert("Name can only contain letters, spaces, or @.");
+                    return false;
+                }
+
+                if (staffPass.length < 6) {
+                    alert("Password must be at least 6 characters long.");
+                    return false;
+                }
+
+                if (!contactPattern.test(staffContact)) {
+                    alert("Contact must be in the form '01#-#######'.");
+                    return false;
+                }
+
+                return true;
+            }
+
+            <?php if ($updateSuccess): ?>
+                alert("Data has been updated.");
+            <?php endif; ?>
+        </script>
     </div>
 </body>
+
 </html>

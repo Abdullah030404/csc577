@@ -1,5 +1,5 @@
 <?php
-include_once "stuHeader.php"; 
+include_once "stuHeader.php";
 
 // Fetch student details from database based on session variable
 $studentIC = $_SESSION['userID'];
@@ -72,6 +72,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -192,48 +193,62 @@ $conn->close();
         }
     </style>
 </head>
+
 <body>
     <div class="update-container">
         <div class="update-header">
             <h2>Update Student Profile</h2>
         </div>
         <div class="update-content">
-            <form action="stuUpdate.php" method="post">
+            <form action="stuUpdate.php" method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label>Student IC Number</label>
-                    <input type="text" name="studentIC" class="form-control" value="<?php echo htmlspecialchars($studentIC); ?>" readonly>
+                    <input type="text" name="studentIC" class="form-control"
+                        value="<?php echo htmlspecialchars($studentIC); ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label>Student Name</label>
-                    <input type="text" name="studentName" class="form-control" value="<?php echo htmlspecialchars($studentName); ?>">
+                    <input type="text" name="studentName" class="form-control"
+                        value="<?php echo htmlspecialchars($studentName); ?>" pattern="[A-Za-z\s]+"
+                        title="Only letters and spaces are allowed" required>
                 </div>
                 <div class="form-group">
                     <label>Student Age</label>
-                    <input type="text" name="studentAge" class="form-control" value="<?php echo htmlspecialchars($studentAge); ?>">
+                    <input type="number" name="studentAge" class="form-control"
+                        value="<?php echo htmlspecialchars($studentAge); ?>" required>
                 </div>
                 <div class="form-group">
                     <label>Student Email</label>
-                    <input type="text" name="studentEmail" class="form-control" value="<?php echo htmlspecialchars($studentEmail); ?>">
+                    <input type="email" name="studentEmail" class="form-control"
+                        value="<?php echo htmlspecialchars($studentEmail); ?>" required>
                 </div>
                 <div class="form-group">
                     <label>Student Address</label>
-                    <input type="text" name="studentAddress" class="form-control" value="<?php echo htmlspecialchars($studentAddress); ?>">
+                    <input type="text" name="studentAddress" class="form-control"
+                        value="<?php echo htmlspecialchars($studentAddress); ?>" required>
                 </div>
                 <div class="form-group">
                     <label>Guardian Name</label>
-                    <input type="text" name="guardianName" class="form-control" value="<?php echo htmlspecialchars($guardianName); ?>">
+                    <input type="text" name="guardianName" class="form-control"
+                        value="<?php echo htmlspecialchars($guardianName); ?>" pattern="[A-Za-z\s]+"
+                        title="Only letters and spaces are allowed" required>
                 </div>
                 <div class="form-group">
                     <label>Guardian Contact</label>
-                    <input type="text" name="guardianContact" class="form-control" value="<?php echo htmlspecialchars($guardianContact); ?>">
+                    <input type="text" name="guardianContact" class="form-control"
+                        value="<?php echo htmlspecialchars($guardianContact); ?>" pattern="01\d-\d{7}"
+                        title="Format: 01#-#######" required>
                 </div>
                 <div class="form-group">
                     <label>Class Name</label>
-                    <input type="text" name="className" class="form-control" value="<?php echo htmlspecialchars($className); ?>" readonly>
+                    <input type="text" name="className" class="form-control"
+                        value="<?php echo htmlspecialchars($className); ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label>Mentor Name</label>
-                    <input type="text" name="mentorName" class="form-control" value="<?php echo htmlspecialchars($mentorName); ?>" readonly>
+                    <input type="text" name="mentorName" class="form-control"
+                        value="<?php echo htmlspecialchars($mentorName); ?>" pattern="[A-Za-z\s]+"
+                        title="Only letters and spaces are allowed" readonly>
                 </div>
                 <div class="btn-container">
                     <input type="submit" class="btn btn-primary" value="Update">
@@ -241,6 +256,41 @@ $conn->close();
                 </div>
             </form>
         </div>
+        <script>
+            function validateForm() {
+                // Get the values of the inputs
+                var studentName = document.getElementsByName('studentName')[0].value;
+                var guardianName = document.getElementsByName('guardianName')[0].value;
+                var mentorName = document.getElementsByName('mentorName')[0].value;
+                var guardianContact = document.getElementsByName('guardianContact')[0].value;
+
+                // Validate student name, guardian name, and mentor name: only letters and spaces
+                var namePattern = /^[A-Za-z\s]+$/;
+                if (!namePattern.test(studentName)) {
+                    alert('Student name can only contain letters and spaces.');
+                    return false;
+                }
+                if (!namePattern.test(guardianName)) {
+                    alert('Guardian name can only contain letters and spaces.');
+                    return false;
+                }
+                if (!namePattern.test(mentorName)) {
+                    alert('Mentor name can only contain letters and spaces.');
+                    return false;
+                }
+
+                // Validate guardian contact: 01#-#######
+                var contactPattern = /^01\d-\d{7}$/;
+                if (!contactPattern.test(guardianContact)) {
+                    alert('Guardian contact must follow the format 01#-#######.');
+                    return false;
+                }
+
+                // If all validations pass
+                return true;
+            }
+        </script>
     </div>
 </body>
+
 </html>

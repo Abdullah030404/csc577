@@ -75,6 +75,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -197,32 +198,42 @@ $conn->close();
         }
     </style>
 </head>
+
 <body>
     <div class="profile-container">
         <div class="profile-header">
             <h2>Update Principal Details</h2>
         </div>
         <div class="profile-content">
-            <form action="principalUpdate.php" method="post">
+            <form action="principalUpdate.php" method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="staffID">Staff ID</label>
-                    <input type="text" id="staffID" name="staffID" class="form-control" value="<?php echo htmlspecialchars($staffID); ?>" readonly>
+                    <input type="text" id="staffID" name="staffID" class="form-control"
+                        value="<?php echo htmlspecialchars($staffID); ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="staffName">Staff Name</label>
-                    <input type="text" id="staffName" name="staffName" class="form-control" value="<?php echo htmlspecialchars($staffName); ?>" required>
+                    <!-- Pattern to allow only letters (both uppercase and lowercase) and spaces -->
+                    <input type="text" id="staffName" name="staffName" class="form-control"
+                        value="<?php echo htmlspecialchars($staffName); ?>" pattern="[A-Za-z\s]+"
+                        title="Only letters and spaces are allowed" required>
                 </div>
                 <div class="form-group">
                     <label for="staffEmail">Staff Email</label>
-                    <input type="email" id="staffEmail" name="staffEmail" class="form-control" value="<?php echo htmlspecialchars($staffEmail); ?>" required>
+                    <input type="email" id="staffEmail" name="staffEmail" class="form-control"
+                        value="<?php echo htmlspecialchars($staffEmail); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="staffContact">Staff Contact</label>
-                    <input type="text" id="staffContact" name="staffContact" class="form-control" value="<?php echo htmlspecialchars($staffContact); ?>" required>
+                    <!-- Pattern to match 01#-####### format -->
+                    <input type="text" id="staffContact" name="staffContact" class="form-control"
+                        value="<?php echo htmlspecialchars($staffContact); ?>" pattern="01\d-\d{7}"
+                        title="Format: 01#-#######" required>
                 </div>
                 <div class="form-group">
                     <label for="qualification">Qualification</label>
-                    <input type="text" id="qualification" name="qualification" class="form-control" value="<?php echo htmlspecialchars($qualification); ?>" required>
+                    <input type="text" id="qualification" name="qualification" class="form-control"
+                        value="<?php echo htmlspecialchars($qualification); ?>" required>
                 </div>
                 <div class="btn-container">
                     <button type="submit" class="btn btn-primary">Update</button>
@@ -230,6 +241,33 @@ $conn->close();
                 </div>
             </form>
         </div>
+
+        <script>
+            function validateForm() {
+                // Get the values of the inputs
+                var staffName = document.getElementById('staffName').value;
+                var staffContact = document.getElementById('staffContact').value;
+
+                // Validate staff name: only letters and spaces
+                var namePattern = /^[A-Za-z\s]+$/;
+                if (!namePattern.test(staffName)) {
+                    alert('Staff name can only contain letters and spaces.');
+                    return false;
+                }
+
+                // Validate staff contact: 01#-#######
+                var contactPattern = /^01\d-\d{7}$/;
+                if (!contactPattern.test(staffContact)) {
+                    alert('Staff contact must follow the format 01#-#######.');
+                    return false;
+                }
+
+                // If all validations pass
+                return true;
+            }
+        </script>
+
     </div>
 </body>
+
 </html>
