@@ -53,7 +53,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             justify-content: space-between;
             align-items: center;
             padding: 1rem 5%;
-            max-width: 1200px;
+            max-width: 1800px;
             margin: 0 auto;
         }
 
