@@ -17,40 +17,49 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
+
         .page-header {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .section {
             margin-bottom: 40px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
+
         table th,
         table td {
             padding: 10px;
             border: 1px solid #ddd;
             text-align: left;
         }
+
         table th {
             background-color: #f4f4f4;
             font-weight: bold;
         }
+
         .table-striped tbody tr:nth-child(odd) {
             background-color: #f9f9f9;
         }
+
         .table-striped tbody tr:nth-child(even) {
             background-color: #fff;
         }
+
         .btn-container {
             display: flex;
-            gap: 10px; /* Space between the buttons */
-            margin-top: 20px; /* Adjust as needed */
+            gap: 10px;
+            margin-top: 20px;
             justify-content: center;
         }
+
         .btn {
             padding: 10px 20px;
             font-size: 16px;
@@ -61,26 +70,97 @@
             text-decoration: none;
             color: #fff;
         }
+
         .btn-primary {
             background-color: #007bff;
         }
+
         .btn-primary:hover {
             background-color: #0056b3;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
         }
+
         .form-group input,
         .form-group select {
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
         }
+
+        .error-message {
+            color: red;
+            display: none;
+        }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const namePattern = /^[A-Za-z\s]+$/;
+            const idPattern = /^[A-Za-z0-9]+$/;
+            const countPattern = /^[0-9]+$/;
+
+            const classID = document.getElementById("classID");
+            const className = document.getElementById("className");
+            const classCount = document.getElementById("classCount");
+
+            classID.addEventListener("input", function() {
+                validateField(classID, idPattern, "Class ID should be alphanumeric.");
+            });
+
+            className.addEventListener("input", function() {
+                validateField(className, namePattern, "Class Name should only contain letters and spaces.");
+            });
+
+            classCount.addEventListener("input", function() {
+                validateField(classCount, countPattern, "Class Count should be a number.");
+            });
+
+            function validateField(field, pattern, message) {
+                const errorMessage = field.nextElementSibling;
+                if (!pattern.test(field.value)) {
+                    errorMessage.textContent = message;
+                    errorMessage.style.display = "block";
+                } else {
+                    errorMessage.textContent = "";
+                    errorMessage.style.display = "none";
+                }
+            }
+        });
+
+        function validateForm() {
+            const namePattern = /^[A-Za-z\s]+$/;
+            const idPattern = /^[A-Za-z0-9]+$/;
+            const countPattern = /^[0-9]+$/;
+
+            const classID = document.forms["classForm"]["classID"].value;
+            const className = document.forms["classForm"]["className"].value;
+            const classCount = document.forms["classForm"]["classCount"].value;
+
+            if (!idPattern.test(classID)) {
+                alert("Class ID should be alphanumeric.");
+                return false;
+            }
+
+            if (!namePattern.test(className)) {
+                alert("Class Name should only contain letters and spaces.");
+                return false;
+            }
+
+            if (!countPattern.test(classCount)) {
+                alert("Class Count should be a number.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 
 <body>
@@ -136,7 +216,6 @@
                 } else {
                     echo "ERROR: Could not execute $sql. " . mysqli_error($dbCon);
                     echo "<a href='clerkAddClass.php' class='button'>Go to Another Page</a>";
-
                 }
             }
 
@@ -179,86 +258,77 @@
                 }
             } else {
                 echo "ERROR: Could not execute $sql. " . mysqli_error($dbCon);
-                
             }
-            ?>
 
-            <!-- Edit Class Form -->
-            <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editClass'])) {
-                $classID = mysqli_real_escape_string($dbCon, $_POST['classID']);
-                $sql = "SELECT * FROM class WHERE classID='$classID'";
-                $result = mysqli_query($dbCon, $sql);
-                if ($row = mysqli_fetch_array($result)) {
-                    ?>
-                    <div class="section">
-                        <h2>Edit Class</h2>
-                        <form method="POST">
-                            <input type="hidden" name="classID" value="<?php echo htmlspecialchars($row['classID']); ?>">
-                            <div class="form-group">
-                                <label for="className">Class Name:</label>
-                                <input type="text" name="className" value="<?php echo htmlspecialchars($row['className']); ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="classCount">Class Count:</label>
-                                <input type="number" name="classCount" value="<?php echo htmlspecialchars($row['classCount']); ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="staffID">Staff:</label>
-                                <select name="staffID" required>
-                                    <?php
-                                    $staffSql = "SELECT staffID, staffName FROM staff";
-                                    $staffResult = mysqli_query($dbCon, $staffSql);
-                                    while ($staffRow = mysqli_fetch_array($staffResult)) {
-                                        echo "<option value='" . htmlspecialchars($staffRow['staffID']) . "' " . ($row['staffID'] == $staffRow['staffID'] ? 'selected' : '') . ">" . htmlspecialchars($staffRow['staffName']) . "</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <button type="submit" name="updateClass" class="btn btn-primary">Update Class</button>
-                        </form>
-                    </div>
-                    <?php
-                    mysqli_free_result($result);
+            // Fetch staff data for dropdown
+            $staffOptions = "";
+            $sqlStaff = "SELECT staffID, staffName FROM staff";
+            if ($resultStaff = mysqli_query($dbCon, $sqlStaff)) {
+                if (mysqli_num_rows($resultStaff) > 0) {
+                    while ($rowStaff = mysqli_fetch_array($resultStaff)) {
+                        $staffOptions .= "<option value='" . htmlspecialchars($rowStaff['staffID']) . "'>" . htmlspecialchars($rowStaff['staffName']) . "</option>";
+                    }
+                    mysqli_free_result($resultStaff);
                 } else {
-                    echo "<p class='lead'><em>No records found for the selected class.</em></p>";
+                    echo "<p class='lead'><em>No staff records were found.</em></p>";
+                }
+            } else {
+                echo "ERROR: Could not execute $sqlStaff. " . mysqli_error($dbCon);
+            }
+
+            // Edit class functionality
+            if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editClass'])) {
+                $editClassID = mysqli_real_escape_string($dbCon, $_POST['classID']);
+                $sqlEdit = "SELECT classID, className, classCount, staffID FROM class WHERE classID='$editClassID'";
+                if ($resultEdit = mysqli_query($dbCon, $sqlEdit)) {
+                    if (mysqli_num_rows($resultEdit) > 0) {
+                        $rowEdit = mysqli_fetch_array($resultEdit);
+                        $editClassName = htmlspecialchars($rowEdit['className']);
+                        $editClassCount = htmlspecialchars($rowEdit['classCount']);
+                        $editStaffID = htmlspecialchars($rowEdit['staffID']);
+                    }
+                    mysqli_free_result($resultEdit);
+                } else {
+                    echo "ERROR: Could not execute $sqlEdit. " . mysqli_error($dbCon);
                 }
             }
             ?>
 
-            <!-- Add New Class Form -->
-            <div class="section">
-                <h2>Add New Class</h2>
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="classID">Class ID:</label>
-                        <input type="text" name="classID" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="className">Class Name:</label>
-                        <input type="text" name="className" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="classCount">Class Count:</label>
-                        <input type="number" name="classCount" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="staffID">Staff:</label>
-                        <select name="staffID" required>
-                            <?php
-                            $staffSql = "SELECT staffID, staffName FROM staff";
-                            $staffResult = mysqli_query($dbCon, $staffSql);
-                            while ($staffRow = mysqli_fetch_array($staffResult)) {
-                                echo "<option value='" . htmlspecialchars($staffRow['staffID']) . "'>" . htmlspecialchars($staffRow['staffName']) . "</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <button type="submit" name="addClass" class="btn btn-primary">Add Class</button>
-                </form>
-            </div>
+            <!-- Form for Add/Update Class -->
+            <form name="classForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="classID">Class ID:</label>
+                    <input type="text" id="classID" name="classID" value="<?php echo isset($editClassID) ? $editClassID : ''; ?>" required>
+                    <span class="error-message">Class ID should be alphanumeric.</span>
+                </div>
+                <div class="form-group">
+                    <label for="className">Class Name:</label>
+                    <input type="text" id="className" name="className" value="<?php echo isset($editClassName) ? $editClassName : ''; ?>" required>
+                    <span class="error-message">Class Name should only contain letters and spaces.</span>
+                </div>
+                <div class="form-group">
+                    <label for="classCount">Class Count:</label>
+                    <input type="number" id="classCount" name="classCount" value="<?php echo isset($editClassCount) ? $editClassCount : ''; ?>" required>
+                    <span class="error-message">Class Count should be a number.</span>
+                </div>
+                <div class="form-group">
+                    <label for="staffID">Staff Name:</label>
+                    <select id="staffID" name="staffID" required>
+                        <?php echo $staffOptions; ?>
+                    </select>
+                </div>
+                <div class="btn-container">
+                    <?php if (isset($editClassID)) : ?>
+                        <button type="submit" name="updateClass" class="btn btn-primary">Update Class</button>
+                    <?php else : ?>
+                        <button type="submit" name="addClass" class="btn btn-primary">Add Class</button>
+                    <?php endif; ?>
+                </div>
+            </form>
         </div>
     </div>
 </body>
 
 </html>
+
+<?php mysqli_close($dbCon); ?>
