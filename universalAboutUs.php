@@ -84,7 +84,61 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         }
 
         main {
-            padding-top: 80px; /* Adjust based on navbar height */
+            padding-top: 40px;
+        }
+
+        .header {
+            text-align: center;
+            position: relative;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--container-background);
+            border: 1px solid var(--container-border);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--text-color);
+        }
+
+        .icon {
+            color: green;
+            font-size: 1.5rem;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -103,6 +157,32 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         </div>
     </nav>
     
+    <main>
+        <div class="header">
+            <div class="header-content">
+                <h1>PENGENALAN</h1>
+                <p><span class="icon">✔️</span>Pusat Pengajian dan Tahfiz Al-Quran. Mendidik Generasi Al-Quran
+                </p>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="card">
+                <h2>Vision</h2>
+                <p>Sebuah Institusi Pendidikan Duniawi dan Ukhrawi Dalam Melahirkan Generasi Al-Quran</p>
+            </div>
+            <div class="card">
+                <h2>Mission</h2>
+                <p>Mendidik dan Memberi Tarbiyah Kepada Generasi Muda Daerah Tuaran.
+            Kompeten Dalam Pelbagai Bidang. Berakhlak, Bertakwa, Ikhlas, Berilmu dan Beramal, Berkonsepkan
+        Sistem Pendidikan Integrasi dan Holistik Untuk Dunia dan Akhirat</p>
+            </div>
+            <div class="card">
+                <h2>Motto</h2>
+                <p>Generasi Rabbani Duniawi Dan Ukhrawi</p>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
 

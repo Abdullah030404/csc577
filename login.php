@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tableName = "";
     $passwordColumnName = "";
     $columnID = "";
+    $roleColumnName = "";
 
     // Determine the table and column to query based on role
     switch ($role) {
@@ -35,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $tableName = 'staff';
             $columnID = 'staffID';
             $passwordColumnName = 'staffPass'; // Updated to use plain text password
+            $roleColumnName = 'staffRole';
             switch ($role) {
                 case 'Clerk':
                     $redirectURL = 'dashClerk.php';
@@ -53,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare the SQL statement
-    $sql = "SELECT {$columnID}, {$passwordColumnName} FROM {$tableName} WHERE {$columnID} = ?";
+    $sql = "SELECT {$columnID}, {$passwordColumnName}, {$roleColumnName} FROM {$tableName} WHERE {$columnID} = ?";
 
     if ($stmt = $conn->prepare($sql)) {
         // Bind the variables to the prepared statement as parameters
@@ -66,16 +68,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if the user exists
         if ($stmt->num_rows == 1) {
             // Bind result variables
-            $stmt->bind_result($db_userID, $db_password);
+            $stmt->bind_result($db_userID, $db_password, $db_role);
             $stmt->fetch();
 
             // Verify the password
             if ($password === $db_password) { // Compare plain text passwords
-                // Password is correct, redirect to appropriate dashboard
-                $_SESSION['userID'] = $db_userID; // Store user ID in session for further use
-                $_SESSION['role'] = $role; // Store role in session for further use
-                header("Location: {$redirectURL}");
-                exit();
+                // Check if the role matches
+                if ($role === $db_role) {
+                    // Password and role are correct, redirect to appropriate dashboard
+                    $_SESSION['userID'] = $db_userID; // Store user ID in session for further use
+                    $_SESSION['role'] = $role; // Store role in session for further use
+                    header("Location: {$redirectURL}");
+                    exit();
+                } else {
+                    echo "You do not have access to this role's dashboard.";
+                }
             } else {
                 echo "Invalid password.";
             }
