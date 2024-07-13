@@ -1,7 +1,7 @@
 <?php
 // Include the database connection file
 include 'db_connection.php';
-
+include_once "universalHeader.php";
 session_start();
 
 // Enable error reporting (remove in production)
@@ -195,18 +195,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-<nav class="navbar">
-<div class="logo-container">
-            <a href="index.html">
-                <img src="image/tahfiz.jpg" alt="Logo">
-            </a>
-        </div>
-        <div class="navbar-links">
-            <a href="login.php">LOGIN</a>
-            <a href="register.php">REGISTER</a>
-        </div>
-    </nav>
-    
     <div class="container">
         <div class="form-container">
             <h2>LOGIN</h2>

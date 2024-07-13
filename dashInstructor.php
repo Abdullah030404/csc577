@@ -1,13 +1,24 @@
 <?php
-// Start session to access session variables
-session_start();
+include_once "instructorHeader.php"; 
 
-// Check if the user is logged in
-if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Instructor') {
-    // Redirect to login page if not logged in or role is incorrect
-    header("Location: login.php");
-    exit;
+// Assuming you have stored the staff's ID in the session during login
+$staffID = $_SESSION['userID']; 
+
+// Database connection (adjust the connection details as needed)
+include 'db_connection.php';
+
+// Fetch the staff's name from the database
+$query = "SELECT staffName FROM staff WHERE staffID = ?";
+$stmt = $conn->prepare($query);
+if ($stmt === false) {
+    die('Prepare failed: ' . htmlspecialchars($conn->error));
 }
+$stmt->bind_param("s", $staffID);
+$stmt->execute();
+$stmt->bind_result($staffName);
+$stmt->fetch();
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -15,73 +26,106 @@ if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Instructor') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Instructor</title>
+    <title>Instructor Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e1e7e0;
+        :root {
+            --primary-color: #2b4560;
+            --secondary-color: #ffffff;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --border-radius: 12px;
+            --background-color: #f0f4f8;
         }
-        .navbar {
-            background-color: #2b4560;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            padding: 0 20px;
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
         }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            margin-left: 15px;
-        }
-        .logo-container img {
-            height: 50px; /* Adjust the height as needed */
-            margin-right: 10px; /* Adjust the spacing as needed */
-        }
-        .navbar-links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 10px;
-            transition: background-color 0.3s ease;
-            font-family: Verdana, sans-serif;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .navbar-links a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        .main-content {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 10px;
+
+        .welcome-banner {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
             text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px; /* Maximum width for the container */
-            width: 50%;
-            margin: auto;
-            margin-top: 200px;
+            font-size: 1.5em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .dashboard-card {
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card h2 {
+            color: var(--primary-color);
+            font-size: 1.25em;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .dashboard-card p {
+            margin: 0.5rem 0;
+            color: var(--text-color);
+        }
+
+        .dashboard-card a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .dashboard-card a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo-container">
-            <a href="index.html">
-                <img src="image/tahfiz.jpg" alt="Logo">
-            </a>
+    <div class="dashboard-container">
+        <div class="welcome-banner">
+            <h1>Welcome, <?php echo htmlspecialchars($staffName); ?>!</h1>
         </div>
-        <div class="navbar-links">
-            <a href="instructorProfile.php">PROFILE</a>
-            <a href="instructorStuList.php">STUDENT</a>
-            <a href="logout.php">LOGOUT</a>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h2>Quote of the Day</h2>
+                <p>"Knowledge doesn't come, but you have to go to it."</p>
+                <p>"Knowledge is life and a cure."</p>
+                <p>"Everything diminishes when it is used except knowledge."</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h2>Upcoming Events</h2>
+                <p>Azan Competition: August 8th</p>
+                <p>Ceramah Ustaz Azhar Idrus: August 15th</p>
+                <p>Gotong-royong Perdana: August 17th</p>
+            </div>
+
         </div>
-    </nav>
-    <div class="main-content">
-        <h1>Welcome to Maahad Tahfiz As Syifa' System</h1>
-        <p>This is the management system for Maahad Tahfiz As Syifa'.</p>
     </div>
 </body>
 </html>

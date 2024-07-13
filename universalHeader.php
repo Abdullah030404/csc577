@@ -1,18 +1,6 @@
 <?php
-// Start session to access session variables
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Instructor') {
-    // Redirect to login page if not logged in or role is incorrect
-    header("Location: login.php");
-    exit;
-}
-
-// Include database connection file if needed
 require_once "db_connection.php"; // Uncomment if you need to include database connection
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,7 +66,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
 
         .navbar-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .navbar-links a {
@@ -105,12 +93,14 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
     <nav class="navbar">
         <div class="navbar-content">
             <div class="logo-container">
-                <a href="dashInstructor.php">MAAHAD TAHFIZ AS SYIFA</a>
+                <a href="universalHomepage.php">MAAHAD TAHFIZ AS SYIFA</a>
             </div>
             <div class="navbar-links">
-            <a href="instructorProfile.php">PROFILE</a>
-            <a href="instructorStuList.php">STUDENT</a>
-            <a href="logout.php">LOGOUT</a>
+            <a href="universalContactUs.php">CONTACT US</a>
+            <a href="universalAboutUs.php">ABOUT US</a>
+            <a href="login.php">LOGIN</a>
+            <a href="register.php">REGISTER</a>
+            
         </div>
         </div>
     </nav>
