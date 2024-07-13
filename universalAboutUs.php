@@ -117,7 +117,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
         }
 
         .card {
-            background-color: var(--container-background);
+            background-color: white;
             border: 1px solid var(--container-border);
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
