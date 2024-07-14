@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Password and role are correct, redirect to appropriate dashboard
                     $_SESSION['userID'] = $db_userID; // Store user ID in session for further use
                     $_SESSION['role'] = $role; // Store role in session for further use
-                    header("Location: {$redirectURL}");
+                    echo "<script>alert('Successful login.'); window.location.href='{$redirectURL}';</script>";
                     exit();
                 } else {
                     echo "You do not have access to this role's dashboard.";
