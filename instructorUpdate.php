@@ -8,7 +8,6 @@ $staffName = "";
 $staffEmail = "";
 $staffContact = "";
 $qualification = "";
-$staffPass = "";
 $updateSuccess = false;
 $errorMessages = [];
 
@@ -18,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $staffEmail = $_POST['staffEmail'];
     $staffContact = $_POST['staffContact'];
     $qualification = $_POST['qualification'];
-    $staffPass = $_POST['staffPass'];
 
     if (!preg_match('/^[A-Za-z@ ]+$/', $staffName)) {
         $errorMessages[] = "Name can only contain letters, spaces, or @.";
@@ -28,20 +26,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessages[] = "Invalid email format.";
     }
 
-    if (!preg_match('/^\d{3}-\d{3} \d{4}$/', $staffContact)) {
-        $errorMessages[] = "Contact must be in the form '###-### ####'.";
-    }
-
-    if (strlen($staffPass) < 6) {
-        $errorMessages[] = "Password must be at least 6 characters long.";
-    } else {
-        $staffPass_hashed = hash('sha256', $staffPass);
+    if (!preg_match('/^01\d-\d{7}$/', $staffContact)) {
+        $errorMessages[] = "Contact must be in the form '01#-#######'.";
     }
 
     if (empty($errorMessages)) {
-        $query = "UPDATE staff SET staffName = ?, staffEmail = ?, staffContact = ?, qualification = ?, staffPass = ? WHERE staffID = ?";
+        $query = "UPDATE staff SET staffName = ?, staffEmail = ?, staffContact = ?, qualification = ? WHERE staffID = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssssss", $staffName, $staffEmail, $staffContact, $qualification, $staffPass_hashed, $staffID);
+        $stmt->bind_param("sssss", $staffName, $staffEmail, $staffContact, $qualification, $staffID);
 
         if ($stmt->execute()) {
             $updateSuccess = true;
@@ -136,8 +128,7 @@ $conn->close();
         }
 
         input[type="text"],
-        input[type="email"],
-        input[type="password"] {
+        input[type="email"] {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
@@ -147,8 +138,7 @@ $conn->close();
         }
 
         input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus {
+        input[type="email"]:focus {
             border-color: var(--primary-color);
             outline: none;
         }
@@ -199,22 +189,16 @@ $conn->close();
         function validateForm() {
             var namePattern = /^[A-Za-z@ ]+$/;
             var staffName = document.getElementById("staffName").value;
-            var staffPass = document.getElementById("staffPass").value;
             var staffContact = document.getElementById("staffContact").value;
-            var contactPattern = /^\d{3}-\d{3} \d{4}$/;
+            var contactPattern = /^01\d-\d{7}$/;
 
             if (!namePattern.test(staffName)) {
                 alert("Name can only contain letters, spaces, or @.");
                 return false;
             }
 
-            if (staffPass.length < 6) {
-                alert("Password must be at least 6 characters long.");
-                return false;
-            }
-
             if (!contactPattern.test(staffContact)) {
-                alert("Contact must be in the form '###-### ####'.");
+                alert("Contact must be in the form '01#-#######'.");
                 return false;
             }
 
@@ -257,18 +241,13 @@ $conn->close();
 
                 <div class="form-group">
                     <label for="staffContact">Contact:</label>
-                    <input type="text" id="staffContact" name="staffContact" value="<?php echo htmlspecialchars($staffContact); ?>" required>
+                    <input type="text" id="staffContact" name="staffContact" value="<?php echo htmlspecialchars($staffContact); ?>" maxlength="11" required>
                 </div>
 
                 <div class="form-group">
                     <label for="qualification">Qualification:</label>
                     <input type="text" id="qualification" name="qualification" value="<?php echo htmlspecialchars($qualification); ?>" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="staffPass">Password:</label>
-                    <input type="password" id="staffPass" name="staffPass" value="<?php echo htmlspecialchars($staffPass); ?>" required>
-                </div>
+                </div>   
 
                 <button type="submit" class="btn-submit">SAVE</button>
             </form>

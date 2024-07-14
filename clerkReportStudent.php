@@ -165,99 +165,78 @@ function displayStudentInformation() {
         /* Print Styles */
         @media print {
             body {
-                background-color: #fff;
-                color: #000;
-                font-size: 12pt;
+                background-color: #fff; /* Set background color for print */
             }
 
             .report-container {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                box-shadow: none;
-                border: none;
+                margin: 0 auto; /* Center the report on print */
+                box-shadow: none; /* Remove box-shadow for print */
+                border-radius: 0; /* Remove border radius for print */
+                border: none; /* Remove border for print */
+                max-width: 100%; /* Ensure report spans full width on print */
             }
 
-            .report-header, .print-btn, .no-print {
-                display: none;
+            .report-header {
+                background-color: transparent; /* Transparent header background for print */
+                color: var(--text-color); /* Text color for print */
+                text-align: left; /* Align header text to left for print */
+                padding: 0; /* No padding for print */
+                font-size: 1.2em; /* Adjust font size for print */
             }
 
-            .report-content {
-                padding: 0;
+            .report-header .print-btn {
+                display: none; /* Hide print button for print */
             }
 
             .print-header {
-                display: block;
-                text-align: center;
-                margin-bottom: 20px;
-                border-bottom: 2px solid #000;
-                padding-bottom: 10px;
+                display: block; /* Display custom print header */
+                text-align: center; /* Center-align for print */
+                font-size: 1.5em; /* Adjust font size */
+                margin-bottom: 1rem; /* Add some space below the header */
             }
 
-            .print-header h2 {
-                font-size: 24pt;
-                margin: 0;
-                color: #2b4560;
-            }
-
-            .print-header h3 {
-                font-size: 16pt;
-                margin: 5px 0 0 0;
-                font-weight: normal;
-            }
-
-            .print-header .school-info {
-                font-size: 10pt;
-                margin-top: 5px;
+            .print-header h2, .print-header h3 {
+                margin: 0; /* Remove margins */
             }
 
             table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
+                box-shadow: none; /* Remove box-shadow for print */
             }
 
             th, td {
-                border: 1px solid #000;
-                padding: 8px;
-                text-align: left;
-            }
-
-            th {
-                background-color: #f2f2f2;
-                font-weight: bold;
+                border: 1px solid #000; /* Add border for table cells in print */
+                padding: 0.5rem; /* Adjust padding for print */
                 color: black;
             }
 
-            tr:nth-child(even) {
-                background-color: #f9f9f9;
+            /* Hide elements for print */
+            .no-print {
+                display: none !important;
             }
+        }
 
-           
+        /* Hide navigation bar for print */
+        @media print {
+            .navbar, .no-print {
+                display: none !important;
+            }
         }
     </style>
     <script>
         function setPrintHeader(reportType) {
             const printHeader = document.createElement('div');
             printHeader.className = 'print-header';
-            const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             printHeader.innerHTML = `
                 <h2>MAAHAD TAHFIZ AS SYIFA</h2>
                 <h3>${reportType} Report</h3>
-                <div class="report-date">Generated on: ${currentDate}</div>
             `;
             document.body.insertBefore(printHeader, document.querySelector('.report-container'));
-
-            const footer = document.createElement('div');
-            footer.className = 'footer';
-            document.body.appendChild(footer);
         }
 
         function handlePrint(reportType) {
             setPrintHeader(reportType);
             window.print();
-            document.querySelector('.print-header').remove();
-            document.querySelector('.footer').remove();
+            document.querySelector('.print-header').remove(); // Remove the print header after printing
         }
     </script>
 </head>

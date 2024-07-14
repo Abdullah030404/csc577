@@ -283,18 +283,19 @@ $conn->close();
             <form method="post" onsubmit="return validateForm()">
                 <div class="profile-content">
                     <form action="studentUpdate.php" method="post" onsubmit="return validateForm()">
-                        <div class="form-group">
-                            <label for="studentPass">Student Password:</label>
-                            <input type="text" id="studentPass" name="studentPass" class="form-control"
-                                value="<?php echo htmlspecialchars($studentPass); ?>" required>
-                        </div>
-
+                        
                         <div class="form-group">
                             <label for="studentName">Student Name:</label>
                             <!-- Pattern to allow only letters (both uppercase and lowercase) and spaces -->
                             <input type="text" id="studentName" name="studentName" class="form-control"
                                 value="<?php echo htmlspecialchars($studentName); ?>" pattern="[A-Za-z\s]+"
                                 title="Only letters and spaces are allowed" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="studentPass">Student Password:</label>
+                            <input type="text" id="studentPass" name="studentPass" class="form-control"
+                                value="<?php echo htmlspecialchars($studentPass); ?>" required>
                         </div>
 
                         <div class="form-group">
