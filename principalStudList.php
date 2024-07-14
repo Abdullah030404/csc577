@@ -43,52 +43,143 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+            margin-top: 20px;
         }
         .main-content {
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
-            margin-top: 80px;
         }
-        .table th {
+        .profile-header {
+            background-color: #2b4560;
+            color: #ffffff;
+            padding: 2rem;
+            text-align: center;
+            font-size: 1.5em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-form {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-form input[type="search"] {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+        }
+        .search-form button {
+            padding: 10px 20px;
             background-color: #2b4560;
             color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .search-form button:hover {
+            background-color: #1c2e3f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2b4560;
+            color: white;
+        }
+        th a {
+            color: white;
+            text-decoration: none;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #e9ecef;
         }
         .action-link {
             color: #2b4560;
             text-decoration: none;
             margin-right: 10px;
+            transition: color 0.3s;
         }
         .action-link:hover {
+            color: #1c2e3f;
             text-decoration: underline;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .pagination li {
+            margin: 0 5px;
+        }
+        .pagination a {
+            display: block;
+            padding: 8px 12px;
+            background-color: #2b4560;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .pagination a:hover, .pagination .active a {
+            background-color: #1c2e3f;
         }
     </style>
 </head>
 <body>
-    <div class="container main-content">
-        <h2 class="mb-4">Student List</h2>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" value="<?php echo htmlspecialchars($search); ?>">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
+    <div class="container">
+        <div class="main-content">
+        <div class="profile-header">
+            <h2>Student List</h2>
         </div>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <form class="search-form" action="" method="GET">
+                <input type="search" name="search" placeholder="Search" value="<?php echo htmlspecialchars($search); ?>">
+                <button type="submit">Search</button>
+            </form>
+            <table>
                 <thead>
                     <tr>
-                        <th><a href="?sort=studentIC&order=<?php echo $sort == 'studentIC' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>" class="text-white">Student IC</a></th>
-                        <th><a href="?sort=studentName&order=<?php echo $sort == 'studentName' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>" class="text-white">Student Name</a></th>
-                        <th><a href="?sort=studentAge&order=<?php echo $sort == 'studentAge' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>" class="text-white">Age</a></th>
-                        <th><a href="?sort=studentEmail&order=<?php echo $sort == 'studentEmail' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>" class="text-white">Email</a></th>
-                        <th><a href="?sort=className&order=<?php echo $sort == 'className' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>" class="text-white">Class</a></th>
+                        <th><a href="?sort=studentIC&order=<?php echo $sort == 'studentIC' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Student IC</a></th>
+                        <th><a href="?sort=studentName&order=<?php echo $sort == 'studentName' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Student Name</a></th>
+                        <th><a href="?sort=studentAge&order=<?php echo $sort == 'studentAge' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Age</a></th>
+                        <th><a href="?sort=studentEmail&order=<?php echo $sort == 'studentEmail' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Email</a></th>
+                        <th><a href="?sort=className&order=<?php echo $sort == 'className' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Class</a></th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -108,17 +199,14 @@ $conn->close();
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
+            <ul class="pagination">
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <li class="page-item <?php echo $page == $i ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>&sort=<?php echo $sort; ?>&order=<?php echo $order; ?>"><?php echo $i; ?></a>
+                    <li <?php echo $page == $i ? 'class="active"' : ''; ?>>
+                        <a href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>&sort=<?php echo $sort; ?>&order=<?php echo $order; ?>"><?php echo $i; ?></a>
                     </li>
                 <?php endfor; ?>
             </ul>
-        </nav>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
