@@ -1,5 +1,5 @@
 <?php
-require_once "db_connection.php"; // Uncomment if you need to include database connection
+include_once "universalHeader.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,62 +26,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
             line-height: 1.6;
         }
 
-        .navbar {
-            background-color: var(--primary-color);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: static;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-
-        .navbar-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-container a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            transition: color 0.3s ease;
-        }
-
-        .logo-container a:hover {
-            color: #f0f0f0;
-        }
-
-        .navbar-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .navbar-links a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .navbar-links a:hover {
-            background-color: var(--hover-color);
-            color: var(--secondary-color);
-        }
+        
 
         main {
             padding-top: 10px; /* Adjust based on navbar height */
@@ -93,7 +38,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
 
         .carousel {
             position: relative;
-            width: 100%; /* Change width to 100% */
+            width: 90%; /* Change width to 100% */
             height: 100vh; /* Full viewport height */
             overflow: hidden;
         }
@@ -115,20 +60,6 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-content">
-            <div class="logo-container">
-                <a href="universalHomepage.php">MAAHAD TAHFIZ AS SYIFA</a>
-            </div>
-            <div class="navbar-links">
-                <a href="universalContactUs.php">CONTACT US</a>
-                <a href="universalAboutUs.php">ABOUT US</a>
-                <a href="login.php">LOGIN</a>
-                <a href="register.php">REGISTER</a>
-            </div>
-        </div>
-    </nav>
-
     <main>
         <div class="carousel">
             <img src="image/homePage1.jpg" alt="Image 1" class="active">
