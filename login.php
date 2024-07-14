@@ -104,114 +104,130 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Maahad Tahfiz As Syifa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
-       body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            justify-content: center;
-            align-items: center;
+        :root {
+            --primary-color: #1a3a63;
+            --secondary-color: #ffffff;
+            --accent-color: #ffd700;
+            --background-color: #f0f4f8;
+            --text-color: #333;
+            --error-color: #ff6b6b;
         }
 
-        .container {
-            display: flex;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            line-height: 1.6;
+            color: var(--text-color);
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin-top: 30px;
+            min-height: 100vh;
+            
+        }
+        .container {
+            margin-top: 80px;
+            width: 600px;
+            margin: auto;
+            padding: 10px;
+            margin-top: 50px;
         }
 
         .form-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            width: 400px;
+            background-color: var(--secondary-color);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .form-container:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
 
         .form-container h2 {
-            color: #2b4560;
-            margin-bottom: 30px;
-            font-size: 28px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        .form-container label {
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #2b4560;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
             font-weight: 600;
-            font-size: 14px;
         }
 
-        .form-container select,
-        .form-container input[type="text"],
-        .form-container input[type="password"] {
+        .form-group select,
+        .form-group input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 16px;
+            font-size: 1rem;
             transition: border-color 0.3s ease;
         }
 
-        .form-container select:focus,
-        .form-container input[type="text"]:focus,
-        .form-container input[type="password"]:focus {
+        .form-group select:focus,
+        .form-group input:focus {
             outline: none;
-            border-color: #3a6186;
-            box-shadow: 0 0 0 2px rgba(58, 97, 134, 0.2);
+            border-color: var(--accent-color);
         }
 
         .button-confirm {
-            text-align: center;
+            margin-top: 1.5rem;
         }
 
         .button-confirm button {
             width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background-color: #3a6186;
-            color: white;
+            padding: 0.75rem;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
             border: none;
             border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .button-confirm button:hover {
-            background-color: #89253e;
+            background-color: var(--accent-color);
+            color: var(--primary-color);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .button-confirm button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+            }
         }
     </style>
 </head>
@@ -220,22 +236,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-container">
             <h2>LOGIN</h2>
             <form action="login.php" method="post">
-                <label for="role">Role</label>
-                <select id="role" name="role" required>
-                    <option value="">Select Role</option>
-                    <option value="Student">Student</option>
-                    <option value="Clerk">Clerk</option>
-                    <option value="Instructor">Instructor</option>
-                    <option value="Principal">Principal</option>
-                </select>
-                <label for="userID">User ID</label>
-                <input type="text" id="userID" name="userID" required>
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" required>
+                        <option value="">Select Role</option>
+                        <option value="Student">Student</option>
+                        <option value="Clerk">Clerk</option>
+                        <option value="Instructor">Instructor</option>
+                        <option value="Principal">Principal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="userID">User ID</label>
+                    <input type="text" id="userID" name="userID" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
                 <div class="button-confirm">
                     <button type="submit">LOG IN</button>
                 </div>
             </form>
+            <?php
+            if (isset($error_message)) {
+                echo "<p class='error-message'>$error_message</p>";
+            }
+            ?>
         </div>
     </div>
 </body>
