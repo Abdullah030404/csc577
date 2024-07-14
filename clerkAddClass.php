@@ -366,9 +366,22 @@
                     <span class="error-message">Class Count should be a number.</span>
                 </div>
                 <div class="form-group">
-                    <label for="staffID">Staff Name:</label>
+                    <label for="staffID">Staff ID</label>
                     <select id="staffID" name="staffID" required>
-                        <?php echo $staffOptions; ?>
+                        <option value="" disabled selected>Select Instructor</option>
+                        <?php
+                        // Fetch instructors from the staff table
+                        $staffQuery = "SELECT staffID, staffName FROM staff WHERE staffRole = 'Instructor'";
+                        $staffResult = mysqli_query($dbCon, $staffQuery);
+
+                        if (mysqli_num_rows($staffResult) > 0) {
+                            while ($staffRow = mysqli_fetch_assoc($staffResult)) {
+                                echo "<option value='{$staffRow['staffID']}'>{$staffRow['staffID']} - {$staffRow['staffName']}</option>";
+                            }
+                        } else {
+                            echo "<option value=''>No Instructors Available</option>";
+                        }
+                        ?>
                     </select>
                 </div>
                 <div class="btn-container">

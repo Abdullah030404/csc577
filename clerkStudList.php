@@ -122,6 +122,8 @@ $conn->close();
 <body>
     <div class="main-content">
         <h1>Student List</h1>
+        <a href="clerkAddStud.php" style="display: inline-block; padding: 0.5rem 1rem; background-color: var(--accent-color); color: var(--secondary-color); 
+        text-decoration: none; border-radius: var(--border-radius); margin-bottom: 1rem;">Add Student</a>
         <div style="overflow-x: auto;">
             <table>
                 <tr>

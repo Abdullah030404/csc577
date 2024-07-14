@@ -397,7 +397,7 @@
 
         <!-- Add Instructor Form -->
         <div class="section">
-            <h2>Instructor</h2>
+            <h2>Add Instructor</h2>
             <form name="instructorForm" action="clerkAddInstructor.php" method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="staffID">Staff ID</label>
