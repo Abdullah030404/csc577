@@ -92,7 +92,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
     <nav class="navbar">
         <div class="navbar-content">
             <div class="logo-container">
-                <a href="universalHomepage.php">MAAHAD TAHFIZ AS SYIFA</a>
+                <a href="index.php">MAAHAD TAHFIZ AS SYIFA</a>
             </div>
         <div class="navbar-links">
             <a href="universalContactUs.php">CONTACT US</a>
