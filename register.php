@@ -108,7 +108,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            
         }
         .container {
             margin-top: 80px;
@@ -216,23 +215,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     </style>
+    <script>
+        // JavaScript for additional validation
+        function validateForm() {
+            // Validate studentName
+            var studentName = document.getElementById('studentName').value;
+            var namePattern = /^[A-Za-z\s]+$/;
+            if (!namePattern.test(studentName)) {
+                alert('Student Name can only contain alphabets.');
+                return false;
+            }
+
+            // Validate studentPass
+            var studentPass = document.getElementById('studentPass').value;
+            if (studentPass.length < 6) {
+                alert('Student Password must be at least 6 characters long.');
+                return false;
+            }
+
+            // Validate guardianName
+            var guardianName = document.getElementById('guardianName').value;
+            if (!namePattern.test(guardianName)) {
+                alert('Guardian Name can only contain alphabets.');
+                return false;
+            }
+
+            // Validate guardianContact
+            var guardianContact = document.getElementById('guardianContact').value;
+            var contactPattern = /^01\d-\d{7}$/;
+            if (!contactPattern.test(guardianContact)) {
+                alert('Guardian Contact must be in the format 01#-#######.');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <div class="form-container">
             <h2>Student Registration</h2>
-            <form action="register.php" method="post">
+            <form action="register.php" method="POST" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="studentIC">Student IC</label>
                     <input type="text" id="studentIC" name="studentIC" maxlength="12" required>
                 </div>
                 <div class="form-group">
                     <label for="studentName">Student Name</label>
-                    <input type="text" id="studentName" name="studentName" maxlength="30" required>
+                    <input type="text" id="studentName" name="studentName" pattern="[A-Za-z\s]+" title="Student Name can only contain alphabets." required>
                 </div>
                 <div class="form-group">
                     <label for="studentPass">Student Password</label>
-                    <input type="password" id="studentPass" name="studentPass" maxlength="30" required>
+                    <input type="password" id="studentPass" name="studentPass" minlength="6" title="Password must be at least 6 characters long." required>
                 </div>
                 <div class="form-group">
                     <label for="studentAge">Student Age</label>
@@ -240,35 +275,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="form-group">
                     <label for="studentEmail">Student Email</label>
-                    <input type="email" id="studentEmail" name="studentEmail" maxlength="30" required>
+                    <input type="email" id="studentEmail" name="studentEmail" required>
                 </div>
                 <div class="form-group">
                     <label for="studentAddress">Student Address</label>
-                    <input type="text" id="studentAddress" name="studentAddress" maxlength="100" required>
+                    <input type="text" id="studentAddress" name="studentAddress" required>
                 </div>
                 <div class="form-group">
                     <label for="guardianName">Guardian Name</label>
-                    <input type="text" id="guardianName" name="guardianName" maxlength="30" required>
+                    <input type="text" id="guardianName" name="guardianName" pattern="[A-Za-z\s]+" title="Guardian Name can only contain alphabets." required>
                 </div>
                 <div class="form-group">
                     <label for="guardianContact">Guardian Contact</label>
-                    <input type="text" id="guardianContact" name="guardianContact" maxlength="11" required>
+                    <input type="text" id="guardianContact" name="guardianContact" pattern="01\d-\d{7}" title="Guardian Contact must be in the format 01#-#######." maxlength="11" required>
                 </div>
                 <div class="button-register">
                     <button type="submit">Register</button>
                 </div>
+                <div class="account">
+                    Already have an account? <a href="login.php">Login</a>
+                </div>
             </form>
-            <?php
-            if (isset($error_message)) {
-                echo "<div class='error-message'>{$error_message}</div>";
-            }
-            ?>
+            <?php if (isset($error_message)) { ?>
+                <div class="error-message"><?php echo $error_message; ?></div>
+            <?php } ?>
+            <?php if ($success) { ?>
+                <div class="success-message">Student registered successfully!</div>
+            <?php } ?>
         </div>
     </div>
-    <?php if ($success): ?>
-    <script>
-        alert("Record inserted successfully.");
-    </script>
-    <?php endif; ?>
 </body>
 </html>
