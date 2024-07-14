@@ -52,9 +52,33 @@ $conn->close();
             width: 90%;
             margin: 2rem auto;
         }
-
+        .page-header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 2rem;
+            text-align: center;
+            font-size: 1.5em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        .add-student-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .add-student-btn:hover {
+            background-color: #ff4757; /* Change background color on hover */
+            transform: translateY(-2px); /* Lift the button slightly */
+        }
         h1 {
-            color: var(--primary-color);
+            color: white;
             text-align: center;
             margin-bottom: 1.5rem;
             font-size: 3rem;
@@ -85,13 +109,15 @@ $conn->close();
         .action-link {
             color: var(--accent-color);
             text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
+            font-weight: 700;
+            transition: color 0.3s ease, transform 0.2s ease;
         }
 
         .action-link:hover {
-            color: #ff4757;
+            color: #ff4757; /* Change text color on hover */
+            transform: translateY(-2px); /* Lift the link slightly */
         }
+
 
         @media (max-width: 1024px) {
             .main-content {
@@ -121,9 +147,10 @@ $conn->close();
 </head>
 <body>
     <div class="main-content">
-        <h1>Student List</h1>
-        <a href="clerkAddStud.php" style="display: inline-block; padding: 0.5rem 1rem; background-color: var(--accent-color); color: var(--secondary-color); 
-        text-decoration: none; border-radius: var(--border-radius); margin-bottom: 1rem;">Add Student</a>
+    <div class="page-header">
+            <h1>STUDENT LIST</h1>
+        </div>
+        <a href="clerkAddStud.php" class="add-student-btn">Add Student</a>
         <div style="overflow-x: auto;">
             <table>
                 <tr>
@@ -148,8 +175,8 @@ $conn->close();
                         <td><?php echo htmlspecialchars($student['guardianContact']); ?></td>
                         <td><?php echo htmlspecialchars($student['className']); ?></td>
                         <td>
-                            <a class="action-link" href="clerkUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a>  
-                            <a class="action-link" href="clerkDeleteStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>" onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
+                        <a class="action-link" href="clerkUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a>  
+                        <a class="action-link" href="clerkDeleteStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>" onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
