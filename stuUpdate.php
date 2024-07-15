@@ -209,8 +209,7 @@ $conn->close();
                 <div class="form-group">
                     <label>Student Name</label>
                     <input type="text" name="studentName" class="form-control"
-                        value="<?php echo htmlspecialchars($studentName); ?>" pattern="[A-Za-z\s]+"
-                        title="Only letters and spaces are allowed" required>
+                        value="<?php echo htmlspecialchars($studentName); ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label>Student Age</label>

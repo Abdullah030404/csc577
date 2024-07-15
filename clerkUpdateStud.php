@@ -12,6 +12,16 @@ $guardianName = "";
 $guardianContact = "";
 $classID = "";
 
+// Fetch the available classes from the database
+$classes = [];
+$queryClasses = "SELECT classID, className FROM class";
+$resultClasses = $conn->query($queryClasses);
+if ($resultClasses->num_rows > 0) {
+    while ($row = $resultClasses->fetch_assoc()) {
+        $classes[] = $row;
+    }
+}
+
 // Check if studentIC is set in the URL
 if (isset($_GET['studentIC'])) {
     $studentIC = $_GET['studentIC'];
@@ -309,10 +319,15 @@ $conn->close();
                 </div>
 
                 <div class="form-group">
-                    <label for="classID">Class ID:</label>
-                    <input type="text" id="classID" name="classID" class="form-control"
-                        value="<?php echo htmlspecialchars($classID); ?>" required>
-                    <span id="classIDValidation" style="color: red; display: none;">Class ID is not valid</span>
+                    <label for="classID">Class:</label>
+                    <select id="classID" name="classID" class="form-control" required>
+                        <option value="">Select Class</option>
+                        <?php foreach ($classes as $class): ?>
+                            <option value="<?php echo $class['classID']; ?>" <?php if ($class['classID'] == $classID) echo 'selected'; ?>>
+                                <?php echo $class['classID'] . '-' . $class['className']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
 
                 <div class="btn-container">

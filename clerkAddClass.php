@@ -191,7 +191,7 @@
 
         function validateForm() {
             const namePattern = /^[A-Za-z\s]+$/;
-            const idPattern = /^[A-Za-z0-9]+$/;
+            const idPattern = /^[0-9]+$/;
             const countPattern = /^[0-9]+$/;
 
             const classID = document.forms["classForm"]["classID"].value;

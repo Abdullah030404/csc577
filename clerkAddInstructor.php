@@ -416,7 +416,7 @@
                 </div>
                 <div class="form-group">
                     <label for="staffContact">Contact</label>
-                    <input type="text" id="staffContact" name="staffContact" required>
+                    <input type="text" id="staffContact" name="staffContact" maxlength="11" required>
                     <span class="error-message" id="staffContactError"></span>
                 </div>
                 <div class="form-group">

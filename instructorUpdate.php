@@ -231,7 +231,7 @@ $conn->close();
 
                 <div class="form-group">
                     <label for="staffName">Name:</label>
-                    <input type="text" id="staffName" name="staffName" value="<?php echo htmlspecialchars($staffName); ?>" required>
+                    <input type="text" id="staffName" name="staffName" value="<?php echo htmlspecialchars($staffName); ?>" readonly>
                 </div>
 
                 <div class="form-group">
