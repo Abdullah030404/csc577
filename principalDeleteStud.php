@@ -7,7 +7,7 @@ if (isset($_GET['studentIC'])) {
     $studentIC = $conn->real_escape_string($_GET['studentIC']);
 
     // SQL query to delete student based on studentIC
-    $query = "DELETE FROM student WHERE studentIC = '$studentIC'";
+    $query = "UPDATE student SET status = 'NA' WHERE studentIC = '$studentIC'";
 
     // Execute the query
     if ($conn->query($query) === TRUE) {

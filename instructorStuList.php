@@ -27,7 +27,8 @@ $studentQuery = "
     SELECT s.studentIC, s.studentName, s.studentAge, s.studentEmail, s.studentAddress, s.guardianName, s.guardianContact, c.className
     FROM student s
     JOIN class c ON s.classID = c.classID
-    WHERE c.staffID = ?
+    WHERE s.status LIKE 'A'
+    AND c.staffID = ?
 ";
 $stmt = $conn->prepare($studentQuery);
 $stmt->bind_param("s", $instructorID);
