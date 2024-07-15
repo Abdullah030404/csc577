@@ -142,7 +142,7 @@ include_once "universalHeader.php";
             <div class="card">
                 <i class="fas fa-phone-alt icon"></i>
                 <h2>Phone Number</h2>
-                <p>019-930 6844</p>
+                <p>012-269 8189</p>
             </div>
             <div class="card">
                 <i class="fas fa-envelope icon"></i>
