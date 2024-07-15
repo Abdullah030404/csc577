@@ -103,7 +103,7 @@ require_once "db_connection.php"; // Uncomment if you need to include database c
     <nav class="navbar">
         <div class="navbar-content">
             <div class="logo-container">
-                <a href="dashPrincipal.php">MAAHAD TAHFIZ AS SYIFA</a>
+                <a href="dashPrincipal.php">MAAHAD TAHFIZ AS SYIFA'</a>
             </div>
         <div class="navbar-links">
             <a href="principalProfile.php">PROFILE</a>

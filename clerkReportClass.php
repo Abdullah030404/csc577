@@ -220,7 +220,7 @@ function displayClassInformation() {
             const printHeader = document.createElement('div');
             printHeader.className = 'print-header';
             printHeader.innerHTML = `
-                <h2>MAAHAD TAHFIZ AS SYIFA</h2>
+                <h2>MAAHAD TAHFIZ AS SYIFA'</h2>
                 <h3>${reportType} Report</h3>
             `;
             document.body.insertBefore(printHeader, document.querySelector('.report-container'));
