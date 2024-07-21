@@ -284,7 +284,7 @@
                     echo "<tr>";
                     echo "<th>Class ID</th>";
                     echo "<th>Class Name</th>";
-                    echo "<th>Class Count</th>";
+                    echo "<th>Max Capacity</th>";
                     echo "<th>Staff Name</th>";
                     echo "<th>Actions</th>";
                     echo "</tr>";
