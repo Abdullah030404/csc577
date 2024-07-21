@@ -7,6 +7,7 @@ $query = "
     SELECT s.studentIC, s.studentPass, s.studentName, s.studentAge, s.studentEmail, s.studentAddress, s.guardianName, s.guardianContact, c.className
     FROM student s
     JOIN class c ON s.classID = c.classID
+    WHERE s.status like 'A'
     ORDER BY c.classID
 ";
 $result = $conn->query($query);

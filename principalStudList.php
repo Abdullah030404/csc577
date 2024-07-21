@@ -21,6 +21,7 @@ $query = "
     FROM student s
     JOIN class c ON s.classID = c.classID
     $where_clause
+    AND s.status LIKE 'A'
     ORDER BY $sort $order
     LIMIT $offset, $records_per_page
 ";

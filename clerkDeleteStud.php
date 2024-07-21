@@ -5,7 +5,7 @@ if (isset($_GET['studentIC'])) {
     $studentIC = $_GET['studentIC'];
 
     // Prepare the delete statement
-    $stmt = $conn->prepare("DELETE FROM student WHERE studentIC = ?");
+    $stmt = $conn->prepare("UPDATE student SET status = 'NA' WHERE studentIC = ?");
     $stmt->bind_param("s", $studentIC);
 
     // Execute the statement
