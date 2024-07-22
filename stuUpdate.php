@@ -1,6 +1,9 @@
 <?php
 include_once "stuHeader.php";
 
+// Initialize success flag
+$updateSuccess = false;
+
 // Fetch student details from database based on session variable
 $studentIC = $_SESSION['userID'];
 
@@ -23,9 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sisssss", $studentName, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $studentIC);
 
     if ($stmt->execute()) {
+        // Set success flag to true
+        $updateSuccess = true;
         // Redirect to profile page after successful update
-        header("Location: stuProfile.php");
-        exit;
+        // header("Location: stuProfile.php");
+        // exit;
     } else {
         // Handle error if update fails
         echo "Error: Could not update student details.";
@@ -192,6 +197,49 @@ $conn->close();
             }
         }
     </style>
+    <script>
+        function validateForm() {
+            // Get the values of the inputs
+            var studentName = document.getElementsByName('studentName')[0].value;
+            var guardianName = document.getElementsByName('guardianName')[0].value;
+            var mentorName = document.getElementsByName('mentorName')[0].value;
+            var guardianContact = document.getElementsByName('guardianContact')[0].value;
+
+            // Validate student name, guardian name, and mentor name: only letters and spaces
+            var namePattern = /^[A-Za-z\s]+$/;
+            if (!namePattern.test(studentName)) {
+                alert('Student name can only contain letters and spaces.');
+                return false;
+            }
+            if (!namePattern.test(guardianName)) {
+                alert('Guardian name can only contain letters and spaces.');
+                return false;
+            }
+            if (!namePattern.test(mentorName)) {
+                alert('Mentor name can only contain letters and spaces.');
+                return false;
+            }
+
+            // Validate guardian contact: 01#-#######
+            var contactPattern = /^01\d-\d{7}$/;
+            if (!contactPattern.test(guardianContact)) {
+                alert('Guardian contact must follow the format 01#-#######.');
+                return false;
+            }
+
+            // If all validations pass
+            return true;
+        }
+
+        window.onload = function() {
+            // Check if updateSuccess flag is set in PHP
+            <?php if ($updateSuccess): ?>
+                alert('Data has been updated');
+                // Redirect to profile page after showing the alert
+                window.location.href = 'stuProfile.php';
+            <?php endif; ?>
+        };
+    </script>
 </head>
 
 <body>
@@ -255,40 +303,6 @@ $conn->close();
                 </div>
             </form>
         </div>
-        <script>
-            function validateForm() {
-                // Get the values of the inputs
-                var studentName = document.getElementsByName('studentName')[0].value;
-                var guardianName = document.getElementsByName('guardianName')[0].value;
-                var mentorName = document.getElementsByName('mentorName')[0].value;
-                var guardianContact = document.getElementsByName('guardianContact')[0].value;
-
-                // Validate student name, guardian name, and mentor name: only letters and spaces
-                var namePattern = /^[A-Za-z\s]+$/;
-                if (!namePattern.test(studentName)) {
-                    alert('Student name can only contain letters and spaces.');
-                    return false;
-                }
-                if (!namePattern.test(guardianName)) {
-                    alert('Guardian name can only contain letters and spaces.');
-                    return false;
-                }
-                if (!namePattern.test(mentorName)) {
-                    alert('Mentor name can only contain letters and spaces.');
-                    return false;
-                }
-
-                // Validate guardian contact: 01#-#######
-                var contactPattern = /^01\d-\d{7}$/;
-                if (!contactPattern.test(guardianContact)) {
-                    alert('Guardian contact must follow the format 01#-#######.');
-                    return false;
-                }
-
-                // If all validations pass
-                return true;
-            }
-        </script>
     </div>
 </body>
 
