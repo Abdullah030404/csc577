@@ -7,6 +7,7 @@ $staffName = "";
 $staffEmail = "";
 $staffContact = "";
 $qualification = "";
+$updateSuccess = false; // Flag to indicate if the update was successful
 
 // Include database connection file
 require_once "db_connection.php";
@@ -57,9 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $updateStmt->bind_param("sssss", $staffName, $staffEmail, $staffContact, $qualification, $staffID);
 
     if ($updateStmt->execute()) {
-        // Redirect to profile page after successful update
-        header("Location: principalProfile.php");
-        exit;
+        $updateSuccess = true; // Set the flag to true if update is successful
     } else {
         // Handle error if update fails
         echo "Error: Could not update principal details.";
@@ -265,6 +264,11 @@ $conn->close();
                 // If all validations pass
                 return true;
             }
+
+            // Display alert if update was successful
+            <?php if ($updateSuccess): ?>
+                alert('Data has been updated');
+            <?php endif; ?>
         </script>
 
     </div>

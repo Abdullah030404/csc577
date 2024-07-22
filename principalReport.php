@@ -122,9 +122,14 @@ $conn->close();
                 <a href="reportStaffInformation.php" class="btn btn-primary">View Report</a>
             </div>
             <div class="report-card">
-                <h2>Student Information</h2>
+                <h2>Current Student Information</h2>
                 <p>Review student data, including personal information,guardian contact and class joined.</p>
                 <a href="reportStudentInformation.php" class="btn btn-primary">View Report</a>
+            </div>
+            <div class="report-card">
+                <h2>Former Student Information</h2>
+                <p>Review student data, including personal information,guardian contact.</p>
+                <a href="reportFormerStudent.php" class="btn btn-primary">View Report</a>
             </div>
         </div>
     </div>

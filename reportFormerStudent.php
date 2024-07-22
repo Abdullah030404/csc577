@@ -2,39 +2,44 @@
 include 'db_connection.php';
 include_once "principalHeader.php";
 
-function displayClassInformation() {
+// Function to display Former Student Information Report
+function displayFormerStudentInformation() {
     global $conn;
-    $sql = "SELECT c.classID, c.className, c.classCount, 
-                   (SELECT COUNT(*) FROM student st WHERE st.classID = c.classID AND st.status = 'A') AS totalStudents, 
-                   s.staffName 
-            FROM class c 
-            LEFT JOIN staff s ON c.staffID = s.staffID";
+    $sql = "SELECT s.studentIC, s.studentName, s.studentAge, s.studentEmail, 
+                   s.studentAddress, s.guardianName, s.guardianContact 
+            FROM student s
+            WHERE s.status = 'NA' 
+            ORDER BY s.studentIC"; // Optional: Sort by studentIC or any other field
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         echo "<table>
                 <thead>
                     <tr>
-                        <th>Class ID</th>
-                        <th>Class Name</th>
-                        <th>Max Capacity</th>
-                        <th>Total Students</th>
-                        <th>Assigned Instructor</th>
+                        <th>Student IC</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Guardian Name</th>
+                        <th>Guardian Contact</th>
                     </tr>
                 </thead>
                 <tbody>";
         while ($row = $result->fetch_assoc()) {
             echo "<tr>
-                    <td>" . htmlspecialchars($row["classID"]) . "</td>
-                    <td>" . htmlspecialchars($row["className"]) . "</td>
-                    <td>" . htmlspecialchars($row["classCount"]) . "</td>
-                    <td>" . htmlspecialchars($row["totalStudents"]) . "</td>
-                    <td>" . htmlspecialchars($row["staffName"] ?? 'Not Assigned') . "</td>
+                    <td>" . htmlspecialchars($row["studentIC"]) . "</td>
+                    <td>" . htmlspecialchars($row["studentName"]) . "</td>
+                    <td>" . htmlspecialchars($row["studentAge"]) . "</td>
+                    <td>" . htmlspecialchars($row["studentEmail"]) . "</td>
+                    <td>" . htmlspecialchars($row["studentAddress"]) . "</td>
+                    <td>" . htmlspecialchars($row["guardianName"]) . "</td>
+                    <td>" . htmlspecialchars($row["guardianContact"]) . "</td>
                 </tr>";
         }
         echo "</tbody></table>";
     } else {
-        echo "<p>No classes found.</p>";
+        echo "<p>No former students found.</p>";
     }
 }
 ?>
@@ -43,7 +48,7 @@ function displayClassInformation() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Information Report</title>
+    <title>Former Student Information Report</title>
     <style>
         :root {
             --primary-color: #2b4560;
@@ -79,7 +84,7 @@ function displayClassInformation() {
             font-size: 1.5em;
             letter-spacing: 2px;
             text-transform: uppercase;
-            position: relative; /* Ensure position relative for absolute print button */
+            position: relative;
         }
 
         .report-header .print-btn {
@@ -236,12 +241,16 @@ function displayClassInformation() {
 <body>
     <div class="report-container">
         <div class="report-header no-print">
-            <h1>Class Information Report</h1>
-            <button class="print-btn" onclick="handlePrint('Class Information')">Print</button>
+            <h1>Former Student Information Report</h1>
+            <button class="print-btn" onclick="handlePrint('Former Student Information')">Print</button>
         </div>
         <div class="report-content">
-            <?php displayClassInformation(); ?>
+            <?php displayFormerStudentInformation(); ?>
         </div>
     </div>
 </body>
 </html>
+
+<?php
+$conn->close();
+?>
