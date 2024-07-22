@@ -2,18 +2,17 @@
 include 'db_connection.php';
 include_once "clerkHeader.php";
 
-// Function to display Student Information Report sorted by classID
-function displayStudentInformation() {
+// Function to display Former Student Information Report
+function displayFormerStudentInformation() {
     global $conn;
-    $sql = "SELECT s.*, c.className 
+    $sql = "SELECT s.studentIC, s.studentName, s.studentAge, s.studentEmail, 
+                   s.studentAddress, s.guardianName, s.guardianContact 
             FROM student s
-            LEFT JOIN class c ON s.classID = c.classID
-            WHERE s.status = 'A' 
-            ORDER BY s.classID"; // Adding ORDER BY clause to sort by classID
+            WHERE s.status = 'NA' 
+            ORDER BY s.studentIC"; // Optional: Sort by studentIC or any other field
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        
         echo "<table>
                 <thead>
                     <tr>
@@ -24,7 +23,6 @@ function displayStudentInformation() {
                         <th>Address</th>
                         <th>Guardian Name</th>
                         <th>Guardian Contact</th>
-                        <th>Class</th>
                     </tr>
                 </thead>
                 <tbody>";
@@ -37,12 +35,11 @@ function displayStudentInformation() {
                     <td>" . htmlspecialchars($row["studentAddress"]) . "</td>
                     <td>" . htmlspecialchars($row["guardianName"]) . "</td>
                     <td>" . htmlspecialchars($row["guardianContact"]) . "</td>
-                    <td>" . htmlspecialchars($row["className"] ?? 'Not Assigned') . "</td>
                 </tr>";
         }
         echo "</tbody></table>";
     } else {
-        echo "<p>No students found.</p>";
+        echo "<p>No former students found.</p>";
     }
 }
 ?>
@@ -51,7 +48,7 @@ function displayStudentInformation() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Information Report</title>
+    <title>Former Student Information Report</title>
     <style>
         :root {
             --primary-color: #2b4560;
@@ -244,11 +241,11 @@ function displayStudentInformation() {
 <body>
     <div class="report-container">
         <div class="report-header no-print">
-            <h1>Student Information Report</h1>
-            <button class="print-btn" onclick="handlePrint('Student Information')">Print</button>
+            <h1>Former Student Information Report</h1>
+            <button class="print-btn" onclick="handlePrint('Former Student Information')">Print</button>
         </div>
         <div class="report-content">
-            <?php displayStudentInformation(); ?>
+            <?php displayFormerStudentInformation(); ?>
         </div>
     </div>
 </body>

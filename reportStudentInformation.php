@@ -8,6 +8,7 @@ function displayStudentInformation() {
     $sql = "SELECT s.*, c.className 
             FROM student s
             LEFT JOIN class c ON s.classID = c.classID
+            WHERE s.status = 'A' 
             ORDER BY s.classID"; // Adding ORDER BY clause to sort by classID
     $result = $conn->query($sql);
 

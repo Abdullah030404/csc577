@@ -5,7 +5,7 @@ include_once "clerkHeader.php";
 function displayClassInformation() {
     global $conn;
     $sql = "SELECT c.classID, c.className, c.classCount, 
-                   (SELECT COUNT(*) FROM student st WHERE st.classID = c.classID) AS totalStudents, 
+                   (SELECT COUNT(*) FROM student st WHERE st.classID = c.classID AND st.status = 'A') AS totalStudents, 
                    s.staffName 
             FROM class c 
             LEFT JOIN staff s ON c.staffID = s.staffID";
