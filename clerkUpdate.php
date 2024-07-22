@@ -42,6 +42,7 @@ if ($result->num_rows === 1) {
 $stmt->close();
 
 // Check if the form was submitted
+$updateSuccess = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the updated clerk details from the form
     $staffName = $_POST['staffName'];
@@ -59,9 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $updateStmt->bind_param("sssss", $staffName, $staffEmail, $staffContact, $qualification, $staffID);
 
     if ($updateStmt->execute()) {
-        // Redirect to profile page after successful update
-        header("Location: clerkProfile.php");
-        exit;
+        $updateSuccess = true;
     } else {
         // Handle error if update fails
         $error_message = "Error: Could not update clerk details.";
@@ -141,13 +140,13 @@ $conn->close();
             border: 1px solid #ccc;
             border-radius: var(--border-radius);
             font-size: 1em;
-            color: var(--text-color);
+            color: var (--text-color);
             transition: all 0.3s ease;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: var(--accent-color);
+            border-color: var (--accent-color);
             box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
         }
 
@@ -173,7 +172,7 @@ $conn->close();
 
         .btn-primary {
             background-color: var(--accent-color);
-            color: var(--secondary-color);
+            color: var (--secondary-color);
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
 
@@ -185,7 +184,7 @@ $conn->close();
 
         .btn-secondary {
             background-color: #6c757d;
-            color: var(--secondary-color);
+            color: var (--secondary-color);
         }
 
         .btn-secondary:hover {
@@ -251,6 +250,11 @@ $conn->close();
             </form>
 
             <script>
+                <?php if ($updateSuccess): ?>
+                    alert('Data successfully updated');
+                    window.location.href = 'clerkProfile.php';
+                <?php endif; ?>
+
                 function validateForm() {
                     // Get the values of the inputs
                     var staffName = document.getElementById('staffName').value;
