@@ -9,7 +9,7 @@ $offset = ($page - 1) * $records_per_page;
 
 // Search functionality
 $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
-$where_clause = $search ? "WHERE s.studentName LIKE '%$search%' OR s.studentIC LIKE '%$search%'" : '';
+$where_clause = $search ? "AND (s.studentName LIKE '%$search%' OR s.studentIC LIKE '%$search%')" : '';
 
 // Sorting
 $sort = isset($_GET['sort']) ? $conn->real_escape_string($_GET['sort']) : 's.classID';
@@ -20,8 +20,8 @@ $query = "
     SELECT SQL_CALC_FOUND_ROWS s.studentIC, s.studentName, s.studentAge, s.studentEmail, c.className
     FROM student s
     JOIN class c ON s.classID = c.classID
+    WHERE s.status = 'A'
     $where_clause
-    AND s.status LIKE 'A'
     ORDER BY $sort $order
     LIMIT $offset, $records_per_page
 ";
@@ -161,45 +161,55 @@ $conn->close();
         .pagination a:hover, .pagination .active a {
             background-color: #1c2e3f;
         }
+        .no-data {
+            text-align: center;
+            font-size: 1.2em;
+            color: #333;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="main-content">
-        <div class="profile-header">
-            <h2>Student List</h2>
-        </div>
+            <div class="profile-header">
+                <h2>Student List</h2>
+            </div>
             <form class="search-form" action="" method="GET">
                 <input type="search" name="search" placeholder="Search" value="<?php echo htmlspecialchars($search); ?>">
                 <button type="submit">Search</button>
             </form>
-            <table>
-                <thead>
-                    <tr>
-                        <th><a href="?sort=studentIC&order=<?php echo $sort == 'studentIC' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Student IC</a></th>
-                        <th><a href="?sort=studentName&order=<?php echo $sort == 'studentName' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Student Name</a></th>
-                        <th><a href="?sort=studentAge&order=<?php echo $sort == 'studentAge' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Age</a></th>
-                        <th><a href="?sort=studentEmail&order=<?php echo $sort == 'studentEmail' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Email</a></th>
-                        <th><a href="?sort=className&order=<?php echo $sort == 'className' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Class</a></th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($students as $student): ?>
+            <?php if (empty($students)): ?>
+                <div class="no-data">No matching data found.</div>
+            <?php else: ?>
+                <table>
+                    <thead>
                         <tr>
-                            <td><?php echo htmlspecialchars($student['studentIC']); ?></td>
-                            <td><?php echo htmlspecialchars($student['studentName']); ?></td>
-                            <td><?php echo htmlspecialchars($student['studentAge']); ?></td>
-                            <td><?php echo htmlspecialchars($student['studentEmail']); ?></td>
-                            <td><?php echo htmlspecialchars($student['className']); ?></td>
-                            <td>
-                                <a class="action-link" href="principalUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a>
-                                <a class="action-link" href="principalDeleteStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>" onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
-                            </td>
+                            <th><a href="?sort=studentIC&order=<?php echo $sort == 'studentIC' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Student IC</a></th>
+                            <th><a href="?sort=studentName&order=<?php echo $sort == 'studentName' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Student Name</a></th>
+                            <th><a href="?sort=studentAge&order=<?php echo $sort == 'studentAge' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Age</a></th>
+                            <th><a href="?sort=studentEmail&order=<?php echo $sort == 'studentEmail' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Email</a></th>
+                            <th><a href="?sort=className&order=<?php echo $sort == 'className' && $order == 'ASC' ? 'DESC' : 'ASC'; ?>">Class</a></th>
+                            <th>Action</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $student): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($student['studentIC']); ?></td>
+                                <td><?php echo htmlspecialchars($student['studentName']); ?></td>
+                                <td><?php echo htmlspecialchars($student['studentAge']); ?></td>
+                                <td><?php echo htmlspecialchars($student['studentEmail']); ?></td>
+                                <td><?php echo htmlspecialchars($student['className']); ?></td>
+                                <td>
+                                    <a class="action-link" href="principalUpdateStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>">Update</a>
+                                    <a class="action-link" href="principalDeleteStud.php?studentIC=<?php echo htmlspecialchars($student['studentIC']); ?>" onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
             <ul class="pagination">
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                     <li <?php echo $page == $i ? 'class="active"' : ''; ?>>

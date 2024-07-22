@@ -9,6 +9,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+$error_message = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the form data
     $role = $_POST['role'];
@@ -50,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             break;
         default:
-            echo "Invalid role.";
+            $error_message = "Invalid role.";
             exit();
     }
 
@@ -85,25 +87,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo "<script>alert('Successful login.'); window.location.href='{$redirectURL}';</script>";
                     exit();
                 } else {
-                    echo "You do not have access to this role's dashboard.";
+                    $error_message = "You do not have access to this role's dashboard.";
                 }
             } else {
-                echo "Invalid password.";
+                $error_message = "Invalid password.";
             }
         } else {
-            echo "No account found with that user ID.";
+            $error_message = "No account found with that user ID.";
         }
 
         // Close the statement
         $stmt->close();
     } else {
-        echo "ERROR: Could not prepare query: $sql. " . $conn->error;
+        $error_message = "ERROR: Could not prepare query: $sql. " . $conn->error;
     }
 
     // Close the connection
     $conn->close();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -219,11 +222,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .error-message {
-            color: var(--error-color);
-            font-size: 0.9rem;
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
             margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
         }
-
+        .success-message {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
         @media (max-width: 480px) {
             .container {
                 width: 90%;
@@ -259,7 +276,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </form>
             <?php
-            if (isset($error_message)) {
+            if (!empty($error_message)) {
                 echo "<p class='error-message'>$error_message</p>";
             }
             ?>
