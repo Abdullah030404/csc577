@@ -154,6 +154,16 @@
         color: var(--primary-color);
         margin-bottom: 1rem;
     }
+    .success-message {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
 </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -253,7 +263,7 @@
                 $sql = "INSERT INTO staff (staffID, staffName, staffEmail, staffContact, staffRole, qualification, staffPass) 
                         VALUES ('$staffID', '$staffName', '$staffEmail', '$staffContact', 'Instructor', '$qualification', '$staffPass')";
                 if (mysqli_query($dbCon, $sql)) {
-                    echo "<p class='lead'>New instructor added successfully.</p>";
+                    echo "<div class='success-message'>New instructor added successfully.</div>";
                 } else {
                     echo "ERROR: Could not execute $sql. " . mysqli_error($dbCon);
                 }
@@ -278,7 +288,7 @@
 
                     // Execute the update query
                     if (mysqli_query($dbCon, $sql)) {
-                        echo "<p class='lead'>Instructor updated successfully.</p>";
+                        echo "<div class='success-message'>Instructor updated successfully.</div>";
                     } else {
                         echo "ERROR: Could not execute $sql. " . mysqli_error($dbCon);
                         echo "<p>Redirecting you back to Add/Update Instructor page...</p>";
