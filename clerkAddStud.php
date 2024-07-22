@@ -56,8 +56,8 @@ while ($row = $result->fetch_assoc()) {
     $registered_students[] = $row;
 }
 
-// Fetch data from student table to check if created
-$student_query = "SELECT studentIC FROM student";
+// Fetch data from student table to check if created and their status
+$student_query = "SELECT studentIC, status FROM student";
 $student_result = $conn->query($student_query);
 
 // Check for query execution errors
@@ -67,7 +67,7 @@ if ($student_result === false) {
 
 $existing_students = [];
 while ($row = $student_result->fetch_assoc()) {
-    $existing_students[] = $row['studentIC'];
+    $existing_students[$row['studentIC']] = $row['status'];
 }
 
 // Close the database connection
@@ -257,7 +257,13 @@ $conn->close();
                             <td><?php echo htmlspecialchars($student['studentIC']); ?></td>
                             <td><?php echo htmlspecialchars($student['studentName']); ?></td>
                             <td>
-                                <?php echo in_array($student['studentIC'], $existing_students) ? 'Done' : 'Not yet'; ?>
+                                <?php
+                                if (isset($existing_students[$student['studentIC']])) {
+                                    echo $existing_students[$student['studentIC']] == 'A' ? 'Done' : 'Not Active';
+                                } else {
+                                    echo 'Not Yet';
+                                }
+                                ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
