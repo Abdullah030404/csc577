@@ -17,7 +17,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Fetch all available classes
-        $classQuery = "SELECT classID FROM class WHERE (SELECT COUNT(*) FROM student WHERE student.classID = class.classID) < class.classCount";
+        $classQuery = "
+            SELECT classID 
+            FROM class 
+            WHERE classID NOT IN (
+                SELECT classID 
+                FROM student 
+                WHERE status = 'A'
+                GROUP BY classID 
+                HAVING COUNT(*) >= classCount
+            )
+        ";
         $classResult = $conn->query($classQuery);
 
         if ($classResult->num_rows > 0) {
@@ -40,7 +50,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if ($result->num_rows > 0) {
                     // If studentIC and studentName match, proceed with registration
-                    $sql = "INSERT INTO student (studentIC, studentName, studentPass, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $sql = "
+                        INSERT INTO student 
+                        (studentIC, studentName, studentPass, studentAge, studentEmail, studentAddress, guardianName, guardianContact, classID, status) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'A')
+                    ";
 
                     if ($stmt = $conn->prepare($sql)) {
                         $stmt->bind_param("sssissssi", $studentIC, $studentName, $studentPass, $studentAge, $studentEmail, $studentAddress, $guardianName, $guardianContact, $classID);
@@ -92,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             --background-color: #f0f4f8;
             --text-color: #333;
             --error-color: #ff6b6b;
+            --success-color: #28a745;
         }
 
         * {
@@ -203,10 +218,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-decoration: underline;
         }
 
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.9rem;
+        .error-message, .success-message {
+            color: var(--secondary-color);
+            background-color: var(--error-color);
+            padding: 1rem;
+            border-radius: 8px;
             margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .success-message {
+            background-color: var(--success-color);
+            color: var(--secondary-color);
         }
 
         @media (max-width: 600px) {
@@ -256,6 +281,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="form-container">
             <h2>Student Registration</h2>
+            <?php if (isset($error_message)) { ?>
+                <div class="error-message"><?php echo $error_message; ?></div>
+            <?php } ?>
+            <?php if ($success) { ?>
+                <div class="success-message">Student registered successfully!</div>
+            <?php } ?>
             <form action="register.php" method="POST" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="studentIC">Student IC</label>
@@ -296,12 +327,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Already have an account? <a href="login.php">Login</a>
                 </div>
             </form>
-            <?php if (isset($error_message)) { ?>
-                <div class="error-message"><?php echo $error_message; ?></div>
-            <?php } ?>
-            <?php if ($success) { ?>
-                <div class="success-message">Student registered successfully!</div>
-            <?php } ?>
         </div>
     </div>
 </body>
