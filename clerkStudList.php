@@ -49,7 +49,7 @@ $conn->close();
             padding: 2rem;
             border-radius: var(--border-radius);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 1300px;
+            max-width: 1350px;
             width: 90%;
             margin: 2rem auto;
         }
